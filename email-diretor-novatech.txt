@@ -1,0 +1,88 @@
+================================================================================
+PARA:    [Nome do Diretor] — NovaTech
+DE:      [Seu Nome] — Delivery Manager, DB1 Global Software
+ASSUNTO: Projeto Assistente IA — Próximos passos e critérios de sucesso
+================================================================================
+
+
+Prezado [Nome do Diretor],
+
+Muito obrigado pelo e-mail e por compartilhar a empolgação do CEO — faz toda a diferença
+ter a liderança engajada desde o início. Estamos igualmente animados com o que vamos
+construir juntos.
+
+Quero aproveitar esse momento inicial para alinharmos alguns pontos importantes antes de
+começarmos, justamente para garantir que a entrega supere as expectativas.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+POR QUE O ASSISTENTE NÃO VAI "SABER TUDO" — E ISSO É NORMAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Uma analogia simples: imagine contratar o melhor especialista do mundo, mas no primeiro
+dia ele só pode responder com base nos documentos que você colocar na mesa dele. Se um
+documento estiver desatualizado, ele vai usar a versão desatualizada. Se um assunto não
+tiver documento, ele vai dizer que não sabe — ou, pior, vai tentar adivinhar.
+
+O assistente que vamos construir funciona exatamente assim. A tecnologia que usaremos
+(chamada RAG — em português, "geração com busca na base de conhecimento") faz o seguinte:
+quando o atendente faz uma pergunta, o sistema busca os trechos mais relevantes dos
+documentos da NovaTech e usa essas informações para formular a resposta. O assistente
+não inventa — ele consulta.
+
+Isso significa que a qualidade das respostas depende diretamente da qualidade da
+documentação. Documentos atualizados, bem organizados e sem contradições = respostas
+precisas e confiáveis. Na nossa análise inicial, já identificamos algumas oportunidades
+de melhoria na base documental atual que trabalharemos juntos ao longo do projeto.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMO VAMOS MEDIR O SUCESSO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Propomos três critérios objetivos para avaliarmos juntos se o projeto atingiu seus
+objetivos:
+
+  1. TEMPO DE ATENDIMENTO
+     Meta: reduzir o tempo médio de busca de 12 minutos para menos de 2 minutos
+     por chamado.
+     Como medimos: comparação do tempo médio antes e após a implantação, com
+     amostragem mensal.
+
+  2. CONFIABILIDADE DAS RESPOSTAS
+     Meta: 85% ou mais das respostas geradas pelo assistente rastreáveis a um
+     documento-fonte verificado.
+     Como medimos: o próprio assistente indicará a origem de cada resposta —
+     auditável a qualquer momento.
+
+  3. ADOÇÃO PELO TIME
+     Meta: 80% dos atendentes utilizando o assistente ativamente no dia a dia
+     ao final dos 3 meses.
+     Como medimos: relatório de uso extraído da plataforma, com frequência semanal.
+
+Esses três números nos darão uma visão clara do impacto real — e são a base para
+evoluções futuras do sistema.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NOSSO COMPROMISSO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A DB1 está totalmente comprometida com o sucesso deste projeto. Acreditamos genuinamente
+que, ao final dos 3 meses, o time de atendimento da NovaTech vai operar em outro nível —
+mais rápido, mais consistente e com muito menos retrabalho.
+
+Nosso próximo passo é agendar o kickoff oficial para apresentarmos o plano detalhado,
+tirar dúvidas e alinhar as primeiras entregas. Podemos marcar ainda esta semana?
+
+Fico à disposição para qualquer conversa antes disso.
+
+
+Atenciosamente,
+
+[Seu Nome]
+Delivery Manager — DB1 Global Software
+[telefone] | [e-mail]
+
+
+================================================================================
