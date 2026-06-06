@@ -1,0 +1,536 @@
+================================================================================
+CONVERSA COMPLETA — PROJETO NOVATECH × DB1 GLOBAL SOFTWARE
+Exportada em: Junho 2026
+================================================================================
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Como um delivery manager que precisa se inteirar do contexto de um possivel cliente.
+Leia os arquivos em anexo e se atualize de todo o contexto dos documentos para futuras
+interacoes para analises.
+
+Arquivos enviados:
+- anexo-a-documentacao-simulada-novatech.md
+- exercicio-fase-1-entendimento.md
+- anexo-b-chunks-referencia-rag.md
+- FAQ-atendimento.md
+- POL-001-politica-devolucao.md
+- PROC-042-frete-especial-v1.md
+- PROC-042-v2-frete-especial-revisado.md
+- SLA-2024-tabela-sla-clientes.md
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto absorvido. Briefing consolidado como Delivery Manager:
+
+O CLIENTE E O PROBLEMA
+A NovaTech e uma empresa de logistica de medio porte (1.200 funcionarios) com operacao
+de atendimento de 45 pessoas. Gargalo central: atendentes gastam em media 12 minutos
+por chamado consultando documentacao espalhada em tres fontes (SharePoint ~800 docs,
+Confluence ~400 paginas, pasta de rede ~50 planilhas), gerando respostas inconsistentes.
+Volume: ~320 chamados/dia, sendo ~60% dependentes de consulta documental.
+
+A DB1 foi contratada para construir um assistente de IA com RAG integrado ao ambiente
+Microsoft (Teams + SharePoint), prazo de 3 meses, meta de reduzir busca de 12 para
+menos de 2 minutos por chamado.
+
+DOCUMENTACAO DISPONIVEL
+
+| Documento                          | Tipo       | Situacao                              |
+|------------------------------------|------------|---------------------------------------|
+| POL-001 — Politica de Devolucao    | Normativo  | OK, atualizado jan/2024               |
+| PROC-042 v1 — Frete Especial       | Normativo  | Sem marcacao de obsoleto, coexiste v2 |
+| PROC-042 v2 — Frete Especial Rev.  | Normativo  | Sem indicacao formal de substituicao  |
+| SLA-2024 — Tabela SLA por Tier     | Contratual | OK, atualizado jan/2024               |
+| FAQ-Atendimento                    | Informal   | Nao validado por Compliance           |
+
+RISCOS INICIALMENTE IDENTIFICADOS
+1. Documentacao contradatoria sem resolucao formal (PROC-042 v1 vs v2)
+2. FAQ informal sendo tratado como fonte confavel
+3. Gaps de cobertura documental (carga danificada, seguro, frete <500kg)
+4. Tiers de clientes: somente Gold, Silver, Standard — "Platinum" nao existe
+5. Regras de devolucao com excecoes criticas para cargas perigosas
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Acrescente ao contexto geral uma tabela resumo dos tipos de documento da NovaTech:
+
+| Fonte         | Qtde docs      | Formato   | Atualizacao | Responsavel           |
+|---------------|----------------|-----------|-------------|-----------------------|
+| SharePoint    | ~800           | PDF, DOCX | Mensal      | Operacoes, Compliance |
+| Confluence    | ~400 paginas   | HTML/Wiki | Semanal     | TI, Comercial         |
+| Pasta de rede | ~50 planilhas  | XLSX      | Mensal      | Comercial             |
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Anotado. Dois pontos relevantes:
+
+- Confluence atualizado semanalmente (vs mensal nas outras fontes) exige cadencias
+  de ingestao diferentes por fonte no pipeline de RAG.
+- Pasta de rede em XLSX e a fonte mais problematica: planilhas com celulas mescladas,
+  formulas e multiplas abas nao se convertem bem em texto para embedding. Ponto
+  obrigatorio de discussao com o Tech Lead antes de fechar cronograma.
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Como um delivery manager da DB1 Global Software preciso preparar analise inicial do
+projeto estilo Kickoff interno. A diretoria da DB1 precisa entender se o projeto e
+viavel com a IA e quais sao os riscos tecnicos que podem impactar prazo e custo.
+Adicione essa informacao ao contexto.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto registrado. Aguardando definicao de formato e nivel de detalhe.
+
+[Usuario respondeu: Documento Word/PDF | Nivel medio — executivo + tecnico]
+
+[Usuario solicitou aguardar a geracao do documento ate ter mais contexto]
+
+Estrutura planejada para o kickoff:
+- Secao 1: Visao Geral (tabela das 3 fontes, contexto do problema)
+- Secao 2: Avaliacao de Viabilidade com IA
+- Secao 3: Riscos tecnicos com probabilidade, impacto e mitigacao
+- Secao 4: Perguntas ao Tech Lead
+- Secao 5: Proximos Passos
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Como delivery manager preparando a analise, faca uma avaliacao dos riscos do projeto
+relacionados as caracteristicas da IA generativa. Para cada risco: classifique
+probabilidade (Alta/Media/Baixa), impacto (prazo, custo, qualidade) e sugira mitigacao.
+
+Considere as tres perguntas ao Tech Lead:
+- Qual experiencia do time com IA generativa?
+- Qual o processo de entrega / subida em producao?
+- Em qual linguagem a IA ira produzir codigo?
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE] — ANALISE DE RISCOS COMPLETA (11 riscos)
+--------------------------------------------------------------------------------
+
+R01 — ALUCINACAO EM PROCEDIMENTOS CRITICOS
+Probabilidade: Alta
+Descricao: Respostas plausiveis mas incorretas sobre prazos, valores ou regras
+inexistentes na documentacao-fonte. Atendente repassa informacao errada ao cliente.
+Impacto: Qualidade / Reputacao / Custo (retrabalho, creditos de SLA)
+Mitigacao: Retrieval obrigatorio — sem grounding = sem resposta. Citacao de fonte
+como criterio de aceite. Casos de teste de alucinacao no plano de QA desde Sprint 1.
+
+---
+
+R02 — DOCUMENTOS CONTRADITORIOS (PROC-042 v1 vs v2)
+Probabilidade: Alta
+Descricao: Duas versoes ativas no SharePoint sem marcacao de obsolescencia. Pipeline
+pode misturar multiplicadores de frete (Norte: 1.6 vs 1.8), fatores de peso distintos
+e prazos diferentes (+2 vs +3 dias) na mesma resposta.
+Impacto: Qualidade / Custo (disputas comerciais) / Prazo (sprint adicional de curadoria)
+Mitigacao: Curadoria documental na fase de discovery. Metadado de vigencia nos chunks.
+Prompt prioriza versao mais recente e sinaliza conflito de versao detectado.
+
+---
+
+R03 — FAQ INFORMAL TRATADO COMO FONTE OFICIAL
+Probabilidade: Alta
+Descricao: FAQ nao validado por Compliance, sem responsavel formal. Contem orientacoes
+que contradizem politicas oficiais (ex: "nao diga que e impossivel" para cargas perigosas,
+quando POL-001 e explicita na proibicao). Sem distincao de peso, assistente responde
+com mesma confianca para fonte normativa e informal.
+Impacto: Qualidade / Risco legal-compliance / Custo (retrabalho)
+Mitigacao: Classificar docs por tipo durante ingestao (normativo, contratual, informal).
+Configurar prompt para citar tipo da fonte. Decidir com cliente se FAQ entra no indice.
+
+---
+
+R04 — CONTEXT ROT EM SESSOES LONGAS NO TEAMS
+Probabilidade: Media
+Descricao: Em sessoes com multiplas perguntas seguidas, o modelo tende a "esquecer"
+instrucoes e restricoes do inicio do contexto, degradando silenciosamente a qualidade.
+A 5a pergunta pode ignorar restricoes estabelecidas na 1a.
+Impacto: Qualidade (degradacao silenciosa) / Custo (consumo de tokens cresce por turno)
+Mitigacao: Janela deslizante de historico (2-3 turnos). Sumarizacao automatica para
+sessoes longas. Orcamento de tokens por requisicao como criterio de arquitetura.
+
+---
+
+R05 — GAPS DE COBERTURA DOCUMENTAL
+Probabilidade: Alta
+Descricao: Topicos relevantes sem documentacao formal: frete padrao <500kg, carga
+danificada em transito, seguro de carga, processo de escalamento para Gestao de Riscos.
+Modelo pode recusar (frustrador) ou inferir incorretamente a partir de docs tangenciais.
+Impacto: Qualidade / UX (perda de confianca do atendente) / Prazo (gaps no UAT)
+Mitigacao: Mapeamento de cobertura antes do go-live. Configurar modelo para escalar
+ao especialista quando nao encontrar chunk relevante.
+
+---
+
+R06 — DESALINHAMENTO DE EXPECTATIVA COM O CLIENTE
+Probabilidade: Alta
+Descricao: Diretoria espera assistente que "responde tudo certo, como o ChatGPT com
+nossos dados". LLMs sao sistemas probabilisticos — qualidade depende da documentacao-fonte.
+CEO viu demo do Copilot (produto maduro, anos de refinamento) e quer algo equivalente.
+Impacto: Gestao (risco de cancelamento/reescopo) / Prazo / Custo
+Mitigacao: Criterios de sucesso mensuraveis no kickoff. Demo controlada com casos reais
+incluindo "nao encontrei informacao" antes do go-live.
+
+---
+
+R07 — INGESTAO DE PLANILHAS XLSX COM ESTRUTURA COMPLEXA
+Probabilidade: Media
+Descricao: ~50 planilhas atualizadas mensalmente pelo Comercial. Celulas mescladas,
+multiplas abas, formulas e formatacao condicional se convertem mal em texto para
+embedding, gerando chunks sem contexto semantico adequado.
+Impacto: Prazo (esforco adicional nao previsto) / Qualidade
+Mitigacao: Definir estrategia de ingestao XLSX com Tech Lead antes de fechar cronograma.
+Avaliar pre-processamento manual se necessario.
+
+---
+
+R08 — DESATUALIZACAO DA BASE DE CONHECIMENTO
+Probabilidade: Media
+Descricao: 3 areas atualizam documentacao em cadencias distintas sem processo unificado.
+Confluence semanal, SharePoint mensal. Sem re-ingestao automatica, assistente responde
+com regras desatualizadas sem aviso.
+Impacto: Qualidade / Custo (incidentes por informacao defasada)
+Mitigacao: Pipeline de re-ingestao incremental por cadencia (semanal/mensal por fonte).
+Metadado de data de ingestao nos chunks com alerta de desatualizacao.
+
+---
+
+R09 — EXPERIENCIA INSUFICIENTE DO TIME COM IA GENERATIVA
+Probabilidade: A confirmar com Tech Lead
+Descricao: Se o time nao tiver experiencia em RAG, prompt engineering e avaliacao de
+LLMs, curva de aprendizado nao prevista nos 3 meses. Decisoes de arquitetura erradas
+no inicio sao custosas de reverter.
+Impacto: Prazo / Custo / Qualidade
+Mitigacao: Perguntar ao Tech Lead: "Qual a experiencia do time com IA generativa?"
+Se baixa maturidade: spike tecnico nas primeiras 2 semanas + considerar especialista RAG.
+
+---
+
+R10 — PROCESSO DE ENTREGA SEM AVALIACAO DE QUALIDADE DE IA
+Probabilidade: A confirmar com Tech Lead
+Descricao: CI/CD tradicional (testes unitarios/integracao) nao captura alucinacao,
+context rot ou mistura de versoes de documentos. Regressoes de qualidade podem chegar
+a producao sem ser detectadas.
+Impacto: Qualidade / Custo / Prazo
+Mitigacao: Perguntar ao Tech Lead: "Qual o processo de entrega e subida em producao?"
+Incluir golden dataset de perguntas/respostas esperadas rodando no CI/CD.
+
+---
+
+R11 — FALTA DE PROFICIENCIA NA LINGUAGEM ESCOLHIDA
+Probabilidade: A confirmar com Tech Lead
+Descricao: Linguagem de desenvolvimento sem alinhamento ao perfil do time compromete
+code review, manutencao e onboarding. Revisoes superficiais geram bugs nao detectados.
+Impacto: Prazo / Qualidade / Custo
+Mitigacao: Perguntar ao Tech Lead: "Em qual linguagem a IA ira produzir codigo?"
+Alocar devs com experiencia comprovada nessa linguagem antes do Sprint 1.
+
+---
+
+RESUMO CONSOLIDADO
+
+| ID  | Risco                                    | Probabilidade  | Impacto Principal         |
+|-----|------------------------------------------|----------------|---------------------------|
+| R01 | Alucinacao em procedimentos criticos     | Alta           | Qualidade / Reputacao     |
+| R02 | Docs contraditorios PROC-042 v1 vs v2   | Alta           | Qualidade / Custo / Prazo |
+| R03 | FAQ informal sem distincao de fonte      | Alta           | Qualidade / Compliance    |
+| R04 | Context rot em sessoes longas no Teams   | Media          | Qualidade / Custo         |
+| R05 | Gaps de cobertura documental             | Alta           | Qualidade / Prazo         |
+| R06 | Desalinhamento de expectativa            | Alta           | Gestao / Prazo / Custo    |
+| R07 | Ingestao de XLSX complexos              | Media          | Prazo / Qualidade         |
+| R08 | Desatualizacao da base                   | Media          | Qualidade / Custo         |
+| R09 | Experiencia do time com IA               | A confirmar    | Prazo / Custo             |
+| R10 | Entrega sem avaliacao de qualidade de IA | A confirmar    | Qualidade / Prazo         |
+| R11 | Proficiencia na linguagem escolhida      | A confirmar    | Prazo / Qualidade         |
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Agora com toda a analise e aprendizado, montar um documento em PDF contendo a analise
+do projeto para o kickoff com a diretoria. Maximo 2 paginas com: historico, demanda,
+projeto, riscos. Pode adicionar etapas importantes.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Documento gerado: NovaTech-Kickoff-DB1.pdf (2 paginas, validado)
+
+Estrutura:
+PAGINA 1: Header DB1/NovaTech | Historico e Contexto (tabela 3 fontes) |
+          Demanda (objetivo, prazo, meta) | Avaliacao de Viabilidade
+          (quadro verde/laranja: favoraveis vs condicionantes)
+PAGINA 2: 11 riscos tecnicos com probabilidade colorida e mitigacao |
+          5 proximos passos priorizados | Rodape com numeracao
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Sugira tecnologias para esse projeto que sejam aceitas no mercado, mantem atualizacoes
+constantes, boa biblioteca de libs e maior chance de conhecimento dos desenvolvedores,
+tanto para front quanto para backend. Pelo menos duas opcoes de cada e o porque.
+E crie outro documento adicionando essas informacoes.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE] — SUGESTOES DE TECNOLOGIA
+--------------------------------------------------------------------------------
+
+FRONTEND
+
+Opcao 1 — React + TypeScript (RECOMENDADA)
+Framework mais adotado no mercado brasileiro. Alta chance de proficiencia no time.
+Ecossistema maduro para dashboards e chat (Ant Design, MUI, TanStack). TypeScript
+agrega seguranca de tipos relevante em projetos de IA. Integracao com Teams Toolkit
+da Microsoft bem documentada.
+
+Opcao 2 — Next.js + TypeScript
+Ideal se o projeto evoluir para portal web alem do Teams (Portal do Atendente).
+SSR nativo, roteamento avancado, mesma base React. Vercel mantem atualizacoes constantes.
+
+BACKEND
+
+Opcao 1 — Python + FastAPI (RECOMENDADA)
+Lingua franca de IA/ML. Todas as libs de RAG — LangChain, LlamaIndex, Azure OpenAI SDK,
+Semantic Kernel — tem Python como primeira classe. FastAPI e moderno, assincrono,
+com Pydantic e Swagger automatico. Time de IA e backend podem compartilhar a mesma stack.
+
+Opcao 2 — Node.js + NestJS + TypeScript
+Elimina troca de linguagem se o time e forte em TypeScript no front. Azure OpenAI SDK
+tem suporte oficial para JS/TS. Excelente para streaming de respostas LLM via WebSocket.
+NestJS e estruturado e escala bem em times maiores.
+
+BANCO DE DADOS VETORIAL
+
+Opcao 1 — Azure AI Search (RECOMENDADA)
+Ja no ecossistema Microsoft contratado. Busca hibrida nativa (vetorial + keyword).
+Sem infra adicional. Integracao direta com Azure OpenAI e SharePoint.
+
+Opcao 2 — Qdrant
+Open-source, alto desempenho. Boa opcao se o cliente quiser portabilidade futura
+fora do Azure. SDK disponivel para Python e JS/TS.
+
+ORQUESTRACAO DE RAG
+
+Opcao 1 — LangChain (RECOMENDADA)
+Mais adotada para pipelines de RAG. Grande comunidade, atualizacoes frequentes,
+integracao nativa com Azure OpenAI, Azure AI Search e todos os principais LLMs.
+
+Opcao 2 — Semantic Kernel (Microsoft)
+SDK oficial da Microsoft para IA. Alinhamento total com stack Azure. Suporte Python
+e C#. Menor curva para times ja no ecossistema Microsoft.
+
+STACK RECOMENDADO CONSOLIDADO
+
+| Camada           | Recomendado             | Alternativa                   |
+|------------------|-------------------------|-------------------------------|
+| Frontend         | React + TypeScript      | Next.js + TypeScript          |
+| Backend / API    | Python + FastAPI        | Node.js + NestJS + TypeScript |
+| Banco Vetorial   | Azure AI Search         | Qdrant                        |
+| Orquestracao RAG | LangChain               | Semantic Kernel (Microsoft)   |
+| LLM              | Azure OpenAI (GPT-4o)   | Azure OpenAI (GPT-4o-mini)    |
+| Infra / Cloud    | Microsoft Azure         | Microsoft Azure               |
+| CI/CD            | Azure DevOps            | GitHub Actions + Azure        |
+
+Documento gerado: NovaTech-Kickoff-DB1-v2.pdf (3 paginas)
+- Pagina 1: Historico, Demanda, Viabilidade
+- Pagina 2: Riscos Tecnicos, Proximos Passos
+- Pagina 3: Tecnologias Sugeridas + Stack Consolidado
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Adicione ao contexto do projeto:
+- Diretoria da NovaTech espera que o assistente "responda tudo certo, como o ChatGPT
+  mas com nossos dados" — nao podemos quebrar o entusiasmo, mas temos que ajustar
+  a expectativa da realidade da IA generativa.
+- Email do diretor: "Estamos animados com o projeto. Nosso CEO viu uma demo do Copilot
+  e quer algo parecido. A expectativa e que em 3 meses nosso time nao precise mais
+  procurar nada manualmente. O assistente vai saber tudo."
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto registrado. Isso eleva o R06 para o risco de maior atencao gerencial do projeto.
+
+Pontos criticos adicionados ao contexto:
+
+1. A referencia ao Copilot e especifica: o CEO viu um produto maduro com anos de
+   refinamento sobre dados M365 ja estruturados. O que a NovaTech recebe em 3 meses
+   e um assistente RAG sobre base documental com contradicoes e gaps. A percepcao de
+   "e a mesma coisa" gerara frustracao no primeiro "nao encontrei informacao".
+
+2. "Nao precisar mais buscar nada manualmente" e meta parcialmente atingivel — mas
+   nao total, especialmente nos gaps documentais identificados (frete padrao, carga
+   danificada, seguro). Se o atendente internalizar que o assistente sabe tudo e
+   parar de verificar, o risco de repasse de informacao incorreta aumenta.
+
+3. Estrategia: nao invalidar o entusiasmo, mas ancorar expectativas em metricas
+   concretas antes do go-live.
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Elabora um e-mail para enviarmos ao diretor da NovaTech que mantenha o entusiasmo,
+porem alinhando premissas a realidade. Explicar (em linguagem nao tecnica) por que
+o assistente nao sabe tudo, o que e RAG, por que qualidade depende da documentacao,
+propor 3 criterios de sucesso mensuraveis e se despedir mantendo nosso entusiasmo.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE] — E-MAIL (TOM EQUILIBRADO — SELECIONADO PELO USUARIO)
+--------------------------------------------------------------------------------
+
+PARA:    [Nome do Diretor] — NovaTech
+DE:      [Seu Nome] — Delivery Manager, DB1 Global Software
+ASSUNTO: Projeto Assistente IA — Proximos passos e criterios de sucesso
+
+Prezado [Nome do Diretor],
+
+Muito obrigado pelo e-mail e por compartilhar a empolgacao do CEO — faz toda a
+diferenca ter a lideranca engajada desde o inicio. Estamos igualmente animados com
+o que vamos construir juntos.
+
+Quero aproveitar esse momento inicial para alinharmos alguns pontos importantes antes
+de comecarmos, justamente para garantir que a entrega supere as expectativas.
+
+POR QUE O ASSISTENTE NAO VAI "SABER TUDO" — E ISSO E NORMAL
+
+Uma analogia simples: imagine contratar o melhor especialista do mundo, mas no
+primeiro dia ele so pode responder com base nos documentos que voce colocar na mesa
+dele. Se um documento estiver desatualizado, ele vai usar a versao desatualizada.
+Se um assunto nao tiver documento, ele vai dizer que nao sabe — ou, pior, vai tentar
+adivinhar.
+
+O assistente que vamos construir funciona exatamente assim. A tecnologia que usaremos
+(chamada RAG — geracao com busca na base de conhecimento) faz o seguinte: quando o
+atendente faz uma pergunta, o sistema busca os trechos mais relevantes dos documentos
+da NovaTech e usa essas informacoes para formular a resposta. O assistente nao inventa
+— ele consulta.
+
+Isso significa que a qualidade das respostas depende diretamente da qualidade da
+documentacao. Na nossa analise inicial, ja identificamos algumas oportunidades de
+melhoria na base documental atual que trabalharemos juntos ao longo do projeto.
+
+COMO VAMOS MEDIR O SUCESSO
+
+1. TEMPO DE ATENDIMENTO
+   Meta: de 12 minutos para menos de 2 minutos por chamado.
+   Como medimos: comparacao do tempo medio antes e apos a implantacao, amostragem mensal.
+
+2. CONFIABILIDADE DAS RESPOSTAS
+   Meta: 85%+ das respostas rastreavies a um documento-fonte verificado.
+   Como medimos: o assistente indicara a origem de cada resposta — auditavel a qualquer
+   momento.
+
+3. ADOCAO PELO TIME
+   Meta: 80% dos atendentes utilizando o assistente ativamente ao final dos 3 meses.
+   Como medimos: relatorio de uso extraido da plataforma, frequencia semanal.
+
+NOSSO COMPROMISSO
+
+A DB1 esta totalmente comprometida com o sucesso deste projeto. Acreditamos genuinamente
+que, ao final dos 3 meses, o time de atendimento da NovaTech vai operar em outro nivel
+— mais rapido, mais consistente e com muito menos retrabalho.
+
+Nosso proximo passo e agendar o kickoff oficial. Podemos marcar ainda esta semana?
+
+Atenciosamente,
+[Seu Nome]
+Delivery Manager — DB1 Global Software
+
+Arquivos gerados nessa etapa:
+- email-diretor-novatech.txt (e-mail para download)
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Para anexar ao e-mail, criar um one-pager visual com: fluxo simplificado de como o
+assistente funciona (busca, resposta e fonte), o que o assistente faz bem, o que nao
+faz, criterios de sucesso propostos. One pager deve ser bem interativo e atrativo.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+One-pager criado como widget interativo visual no chat, contendo:
+
+- Header azul escuro com titulo e identificacao DB1 x NovaTech
+- Fluxo em 5 etapas com boxes coloridos:
+  Pergunta > Busca > Processamento > Resposta > Fonte citada
+- Dois paineis lado a lado:
+  Verde: O que o assistente faz bem (6 itens com check)
+  Laranja: O que o assistente nao faz (6 itens com x)
+- 3 cards de criterios de sucesso com numeros em destaque:
+  -83% tempo de busca | 85%+ rastreabilidade | 80%+ adocao
+- Rodape com identificacao DB1
+
+Arquivo gerado:
+- NovaTech-OnePager-Assistente-IA.pdf (1 pagina exata)
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Gere um arquivo texto para eu baixar da nossa conversa.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Arquivo gerado: conversa-novatech-db1-completa.txt (este arquivo)
+
+
+================================================================================
+RESUMO DE TODOS OS ARQUIVOS GERADOS NA CONVERSA
+================================================================================
+
+| Arquivo                                | Descricao                              | Pags |
+|----------------------------------------|----------------------------------------|------|
+| NovaTech-Kickoff-DB1.pdf              | Kickoff v1 — analise inicial           | 2    |
+| NovaTech-Kickoff-DB1-v2.pdf          | Kickoff v2 — com stack tecnologico     | 3    |
+| NovaTech-OnePager-Assistente-IA.pdf   | One-pager para anexar ao e-mail        | 1    |
+| email-diretor-novatech.txt            | E-mail ao diretor da NovaTech          | —    |
+| conversa-novatech-db1.txt             | Export parcial da conversa (v1)        | —    |
+| conversa-novatech-db1-completa.txt    | Export completo da conversa (este)     | —    |
+
+================================================================================
+CONTEXTO REGISTRADO EM MEMORIA PARA FUTURAS INTERACOES
+================================================================================
+
+- Felipe e Delivery Manager na DB1 Global Software, projeto NovaTech
+- NovaTech: logistica, 1.200 funcionarios, 45 atendentes, ~320 chamados/dia
+- Gargalo: 12 min/chamado em busca manual em 3 fontes (~1.250 docs no total)
+- Contrato: assistente de IA RAG integrado ao Teams + SharePoint, prazo 3 meses
+- Fontes: SharePoint ~800 docs (PDF/DOCX, mensal), Confluence ~400 pags (HTML, semanal),
+  Pasta de rede ~50 planilhas (XLSX, mensal)
+- 11 riscos tecnicos mapeados (R01 a R11)
+- Stack recomendado: React+TS | Python+FastAPI | Azure AI Search | LangChain
+- Expectativa do CEO: "vai saber tudo, como o Copilot" — precisa de alinhamento
+- Criterios de sucesso: -83% tempo busca | 85%+ rastreabilidade | 80%+ adocao
+
+================================================================================
+FIM DA CONVERSA
+================================================================================
