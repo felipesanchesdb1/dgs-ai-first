@@ -1,0 +1,452 @@
+================================================================================
+CONVERSA — PLANEJAMENTO DO DISCOVERY
+Projeto NovaTech × DB1 Global Software
+Exportada em: Junho 2026
+================================================================================
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Incorpore ao contexto do projeto a seguinte informacao:
+
+O projeto foi aprovado. Precisamos planejar a fase de discovery considerando que
+no modelo AI First, agentes de IA pre-analisam documentacao antes do discovery
+humano (fase de Intent).
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto registrado em memoria.
+
+Pontos adicionados ao contexto:
+
+O modelo AI First no Discovery significa que os agentes entram ANTES dos humanos,
+fazendo uma leitura estruturada da documentacao existente — mapeando cobertura,
+detectando contradicoes, identificando gaps — antes de qualquer reuniao de
+levantamento com os stakeholders da NovaTech.
+
+Para o projeto NovaTech isso e especialmente valioso porque ja temos problemas
+documentados: PROC-042 v1 vs v2 sem versionamento, FAQ informal sem validacao,
+gaps de cobertura em topicos frequentes. Um agente pode mapear tudo isso de forma
+sistematica nas ~1.250 fontes antes da primeira reuniao com o cliente.
+
+A pergunta central que guia o planejamento: quais tarefas o agente faz na fase de
+Intent, o que ele entrega como output, e como esse output alimenta o discovery
+humano subsequente?
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Acrescente ao contexto:
+
+Antes de entrevistas com stakeholders, agentes especializados analisam documentacao
+existente, contexto de negocio e restricoes para gerar um mapa priorizado de fontes,
+dependencias e gaps.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto atualizado em memoria.
+
+Isso define melhor o papel dos agentes no Discovery: eles nao fazem analise generica,
+eles entregam um artefato estruturado e priorizado que chega na mao do humano
+ANTES da primeira entrevista.
+
+Para o projeto NovaTech, isso significa que antes de qualquer reuniao, os agentes
+ja terao mapeado:
+
+- FONTES: quais dos ~1.250 documentos tem maior densidade de informacao critica
+- DEPENDENCIAS: onde um documento referencia outro
+  (ex: POL-001 referencia PROC-088; PROC-042 referencia PROC-043)
+- GAPS: topicos frequentes sem cobertura documental formal
+  (frete padrao <500kg, carga danificada, seguro)
+- CONTRADICOES: conflitos entre versoes (PROC-042 v1 vs v2) com evidencia
+
+O entrevistador humano chega na reuniao com esse mapa na mao — as perguntas deixam
+de ser exploratorias e passam a ser confirmatorias e decisorias.
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Agora como delivery manager, elabore um plano de discovery que traga:
+- Atividades que serao feitas pelo agente de IA na fase de Intent (com tempo ganho)
+- Atividades que serao feitas pelo ser humano no discovery
+- A sequencia correta das atividades para o melhor discovery possivel
+Nao gerar arquivo por enquanto — manter no contexto.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE] — PLANO DE DISCOVERY COMPLETO
+--------------------------------------------------------------------------------
+
+======================================================================
+BLOCO 1 — ATIVIDADES DO AGENTE DE IA (FASE DE INTENT)
+======================================================================
+Periodo: antes de qualquer reuniao com stakeholders
+Base: POL-001, PROC-042 v1/v2, SLA-2024, FAQ-Atendimento e ~1.250 fontes
+
+----------------------------------------------------------------------
+A1 — Inventario e classificacao das fontes documentais
+----------------------------------------------------------------------
+Descricao: O agente varre todas as fontes e classifica cada documento
+por tipo (normativo, contratual, informal, operacional), responsavel,
+data de atualizacao e status de vigencia.
+Entrega: Matriz de inventario completa.
+Tempo humano sem IA: 3-5 dias
+Tempo com agente: 2-4 horas
+Ganho estimado: ~4 dias
+
+----------------------------------------------------------------------
+A2 — Deteccao de contradicoes e conflitos entre versoes
+----------------------------------------------------------------------
+Descricao: Compara documentos com sobreposicao de escopo e sinaliza
+divergencias com evidencia textual (qual campo, qual valor em cada
+versao, qual documento e mais recente).
+Entrega: Relatorio de conflitos priorizados por impacto operacional.
+Tempo humano sem IA: 2-3 dias
+Tempo com agente: 3-6 horas
+Ganho estimado: ~2 dias
+
+----------------------------------------------------------------------
+A3 — Mapeamento de gaps de cobertura documental
+----------------------------------------------------------------------
+Descricao: Cruza topicos frequentes de atendimento com documentos
+disponiveis. Identifica temas sem cobertura formal (frete <500kg,
+carga danificada, seguro de carga).
+Entrega: Lista priorizada de gaps com criticidade (alto/medio/baixo).
+Tempo humano sem IA: 2 dias
+Tempo com agente: 2-4 horas
+Ganho estimado: ~1,5 dias
+
+----------------------------------------------------------------------
+A4 — Mapeamento de dependencias entre documentos
+----------------------------------------------------------------------
+Descricao: Identifica referencias cruzadas entre documentos.
+Ex: POL-001 referencia PROC-088; PROC-042 referencia PROC-043.
+Gera grafo de dependencias indicando documentos ausentes que bloqueiam
+cobertura completa de um topico.
+Entrega: Grafo de dependencias.
+Tempo humano sem IA: 1-2 dias
+Tempo com agente: 1-2 horas
+Ganho estimado: ~1 dia
+
+----------------------------------------------------------------------
+A5 — Analise de contexto de negocio e restricoes
+----------------------------------------------------------------------
+Descricao: Analisa contexto operacional (volume de chamados, tiers de
+clientes, SLAs, sazonalidade), restricoes (documentos sem responsavel
+formal, cadencias inconsistentes, acesso restrito por area).
+Entrega: Relatorio de restricoes e riscos de governanca documental.
+Tempo humano sem IA: 1 dia
+Tempo com agente: 1-2 horas
+Ganho estimado: ~6 horas
+
+----------------------------------------------------------------------
+A6 — Geracao do Mapa Priorizado (artefato central da fase de Intent)
+----------------------------------------------------------------------
+Descricao: Consolida A1 a A5. Entrega mapa estruturado com fontes
+ranqueadas por relevancia, dependencias mapeadas, gaps priorizados
+por criticidade e contradicoes sinalizadas com evidencia.
+Este e o documento que o humano leva para todas as entrevistas.
+Entrega: Mapa Priorizado — artefato central do Discovery.
+Tempo humano sem IA: 3-4 dias
+Tempo com agente: 4-6 horas
+Ganho estimado: ~3 dias
+
+GANHO TOTAL ESTIMADO DA FASE DE INTENT COM IA:
+~12 a 16 dias de trabalho analitico humano comprimidos em 1-2 dias.
+
+
+======================================================================
+BLOCO 2 — ATIVIDADES HUMANAS NO DISCOVERY
+======================================================================
+Periodo: apos entrega do Mapa Priorizado pelo agente
+O humano chega nas reunioes com contexto ja estruturado.
+
+----------------------------------------------------------------------
+H1 — Revisao do Mapa Priorizado e preparacao dos roteiros (DB1 interno)
+----------------------------------------------------------------------
+Quem: DM (gestao/aprovacao) + Analista de Negocios (execucao)
+Duracao: 4 horas
+Entradas: Mapa Priorizado (A6), lista de stakeholders NovaTech
+Entrega: Mapa validado + roteiros de entrevista por stakeholder
+         + agenda acordada com NovaTech
+Depende de: A6 concluida
+
+----------------------------------------------------------------------
+H2 — Entrevista com o time de atendimento (usuarios diretos)
+----------------------------------------------------------------------
+Quem: Analista de Negocios (facilitador) + DM (observador/garantia)
+      + 4-6 atendentes NovaTech
+Duracao: 90 minutos
+Entradas: Mapa Priorizado, roteiro de perguntas (H1)
+Entrega: Casos de uso reais, confirmacao/ajuste dos gaps,
+         lista de perguntas frequentes nao cobertas
+NovaTech fornece: 4-6 atendentes por 90 minutos, acesso ao sistema
+                  de chamados para exemplificar casos reais
+Depende de: H1 concluida, agenda confirmada
+
+----------------------------------------------------------------------
+H3 — Entrevista com Operacoes e Compliance
+----------------------------------------------------------------------
+Quem: Analista de Negocios (facilitador) + DM (garantia de decisoes)
+      + Responsavel de Operacoes + Responsavel de Compliance
+Duracao: 60 minutos
+Entradas: Relatorio de contradicoes (A2), roteiro (H1)
+Entrega: Decisao sobre versao vigente dos documentos conflitantes,
+         responsaveis por curadoria, cadencia formal, docs em elaboracao
+NovaTech fornece: Responsavel de Operacoes + Responsavel de Compliance
+                  por 60 minutos. Acesso para confirmar versao vigente.
+Depende de: H1 concluida
+
+----------------------------------------------------------------------
+H4 — Entrevista com TI e Comercial (fontes secundarias)
+----------------------------------------------------------------------
+Quem: Analista de Negocios (facilitador) + Tech Lead DB1 (questoes tecnicas)
+      + Responsavel de TI + Responsavel Comercial
+Duracao: 60 minutos
+Entradas: Inventario de fontes (A1), grafo de dependencias (A4), roteiro (H1)
+Entrega: Mapa de acesso as fontes, planilhas problematicas para ingestao,
+         validacao de cadencias, restricoes de acesso por area
+NovaTech fornece: Responsavel TI + Responsavel Comercial por 60 minutos.
+                  Acesso demonstrativo ao Confluence e pasta de rede.
+Depende de: H1 concluida
+
+----------------------------------------------------------------------
+H5 — Alinhamento executivo com a diretoria NovaTech
+----------------------------------------------------------------------
+Quem: DM (lideranca) + Analista de Negocios (apresentacao)
+      + Diretor NovaTech (obrigatorio) + CEO (se disponivel)
+Duracao: 45 minutos
+Entradas: Mapa Priorizado atualizado, one-pager do assistente,
+          criterios de sucesso, resumo de gaps criticos
+Entrega: Prioridades de negocio validadas, decisao sobre gaps que
+         precisam de documentacao nova, aprovacao do escopo
+NovaTech fornece: Diretor por 45 minutos. CEO se possivel.
+                  Autonomia para decidir sobre escopo e comprometer areas.
+Depende de: H2, H3 e H4 concluidas
+
+----------------------------------------------------------------------
+H6 — Workshop de priorizacao (DB1 + NovaTech)
+----------------------------------------------------------------------
+Quem: DM (gestao/registro) + Analista de Negocios (facilitacao)
+      + representantes de Operacoes, TI e Comercial NovaTech
+Duracao: 2 horas
+Entradas: Mapa Priorizado atualizado, outputs de H2-H5
+Entrega: Backlog priorizado de fontes, lista de docs a criar/corrigir
+         com responsaveis e prazos, decisao sobre PROC-042 v1 vs v2,
+         escopo final da primeira versao do assistente
+NovaTech fornece: 3-4 representantes por 2 horas. Sala com capacidade
+                  colaborativa. Autonomia para comprometer prazos.
+Depende de: H5 concluida e prioridades executivas validadas
+
+----------------------------------------------------------------------
+H7 — Consolidacao — Documento de Discovery Final e Backlog Inicial
+----------------------------------------------------------------------
+Quem: DM (revisao/aprovacao) + Analista de Negocios (producao)
+      Validacao: Diretor NovaTech (aprovacao formal)
+Duracao: 1 dia
+Entradas: Outputs de H1 a H6, Mapa Priorizado final, decisoes do workshop
+Entrega: Documento de Discovery Final, Backlog inicial de sprints,
+         premissas registradas, responsabilidades NovaTech formalizadas
+NovaTech fornece: Disponibilidade do Diretor para aprovacao em ate 24h.
+Depende de: H6 concluida, todas as decisoes registradas
+
+
+======================================================================
+BLOCO 3 — SEQUENCIA CORRETA DAS ATIVIDADES
+======================================================================
+
+FASE DE INTENT (Agente de IA) — Dias 1 a 3
+├── A1 — Inventario e classificacao das fontes
+├── A2 — Deteccao de contradicoes e conflitos
+├── A3 — Mapeamento de gaps de cobertura
+├── A4 — Mapeamento de dependencias entre documentos
+├── A5 — Analise de contexto de negocio e restricoes
+└── A6 — Geracao do Mapa Priorizado ◄ ARTEFATO DE SAIDA DA FASE
+
+        |
+        v
+
+PREPARACAO HUMANA (DB1 interno) — Dia 4
+└── H1 — Revisao do Mapa Priorizado + preparacao dos roteiros
+
+        |
+        v
+
+ENTREVISTAS COM STAKEHOLDERS — Dias 5, 6, 7
+├── H2 — Time de atendimento (usuarios diretos)
+├── H3 — Operacoes e Compliance (donos da doc. normativa)
+└── H4 — TI e Comercial (donos das fontes secundarias)
+
+        |
+        v
+
+VALIDACAO EXECUTIVA — Dia 8
+└── H5 — Alinhamento com a diretoria NovaTech
+
+        |
+        v
+
+CONSOLIDACAO E DECISAO — Dia 9
+└── H6 — Workshop de priorizacao (DB1 + NovaTech)
+
+        |
+        v
+
+FECHAMENTO — Dia 10
+└── H7 — Documento de Discovery Final + backlog inicial
+
+
+ESTIMATIVA DE DURACAO TOTAL
+
+| Fase                          | Duracao       |
+|-------------------------------|---------------|
+| Intent (agente)               | 1-2 dias      |
+| Preparacao humana (H1)        | 1 dia         |
+| Entrevistas (H2, H3, H4)      | 3 dias        |
+| Validacao executiva (H5)      | 1 dia         |
+| Workshop de priorizacao (H6)  | 1 dia         |
+| Consolidacao (H7)             | 1 dia         |
+| TOTAL                         | ~10 dias uteis|
+
+Sem o modelo AI First, a fase equivalente levaria estimados 20-25 dias uteis.
+A pre-analise pelos agentes comprime ~60% do tempo total do Discovery.
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Correcao: na fase de Discovery, o Analista de Negocios fara a fase humana.
+O DM sera responsavel para que tudo aconteca.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto corrigido em memoria.
+
+Separacao de papeis no Discovery:
+
+ANALISTA DE NEGOCIOS — executa todas as atividades humanas:
+- Conduz as entrevistas (H2, H3, H4)
+- Participa do alinhamento executivo (H5)
+- Facilita o workshop de priorizacao (H6)
+- Produz o Documento de Discovery Final (H7)
+
+DM (Felipe) — nao esta dentro das reunioes como executor, mas garante
+que o processo aconteca:
+- Valida o Mapa Priorizado com o Tech Lead (H1)
+- Agenda e acompanha as sessoes
+- Remove impedimentos
+- Valida as entregas em cada etapa
+- Responde pela qualidade do artefato final perante DB1 e cliente
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Crie o plano em one pager — nao se limite a numero de paginas — fornecendo todos
+os dados necessarios. Transforme em cronograma visual realizado em ate duas semanas,
+definindo atividades, responsaveis (DB1 e NovaTech), dependencias de cada atividade
+e tudo que a NovaTech tera que fornecer (acessos, pessoas, tempo etc).
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Documento gerado: NovaTech-Discovery-Plan.pdf (6 paginas)
+
+ESTRUTURA DO DOCUMENTO:
+
+PAGINA 1 — Visao Geral e Cronograma Visual (Gantt)
+- 6 cards de resumo: duracao de cada fase (Intent IA, Preparacao, Entrevistas,
+  Workshop, Consolidacao, Ganho com IA)
+- Gantt de 10 dias uteis (2 semanas) colorido por responsavel:
+  Roxo = Agente IA | Azul = DM | Verde = AN | Laranja = DB1+NovaTech
+- Legenda de cores
+
+PAGINA 2 — Atividades dos Agentes de IA (A1 a A6)
+Para cada atividade:
+- Descricao completa
+- Responsavel DB1 e NovaTech
+- Entradas e saidas
+- Dependencias
+- O que a NovaTech precisa fornecer (destaque em vermelho)
+
+PAGINA 3 — Atividades Humanas do Discovery (H1 a H7)
+Mesma estrutura detalhada para cada sessao:
+- Quem da DB1 executa (AN ou DM)
+- Quem da NovaTech participa
+- Duracao e dia no cronograma
+- Entradas e entregaveis
+- O que a NovaTech fornece
+
+PAGINA 4 — Requisitos da NovaTech + Tabela de Papeis
+- Tabela consolidada de tudo que a NovaTech precisa fornecer organizada
+  por momento (pre-requisito ate encerramento):
+  * Antes Dia 1: credenciais/tokens de API para as 3 fontes documentais
+  * Antes Dia 5: 4-6 atendentes, Responsavel Ops, Responsavel Compliance,
+                  Responsavel TI, Responsavel Comercial
+  * Antes Dia 8: Diretor por 45min (CEO se possivel)
+  * Antes Dia 9: 3-4 representantes por 2h + autonomia para comprometer prazos
+  * Para A3: historico de chamados 3-6 meses + top 30 perguntas frequentes
+  * Apos Dia 10: aprovacao formal do Discovery em ate 24h
+
+- Tabela de papeis completa:
+  DM | AN | Tech Lead | Agente IA | Diretor NovaTech | Stakeholders NovaTech
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Exporte em arquivo texto toda a nossa conversa referente ao discovery.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Arquivo gerado: conversa-discovery-novatech.txt (este arquivo)
+
+
+================================================================================
+RESUMO DO PLANO DE DISCOVERY — REFERENCIA RAPIDA
+================================================================================
+
+TOTAL: 10 dias uteis (2 semanas)
+GANHO COM IA: ~12-16 dias de trabalho analitico comprimidos em 1-2 dias
+
+ATIVIDADES DO AGENTE (Dias 1-3):
+A1 - Inventario e classificacao das fontes         (4h) — Depende: acesso fornecido
+A2 - Deteccao de contradicoes entre versoes        (4h) — Depende: A1
+A3 - Mapeamento de gaps de cobertura               (3h) — Depende: A1
+A4 - Mapeamento de dependencias entre docs         (2h) — Depende: A1 e A3
+A5 - Analise de contexto de negocio e restricoes   (2h) — Depende: A1
+A6 - Geracao do Mapa Priorizado                    (4h) — Depende: A1-A5
+
+ATIVIDADES HUMANAS (Dias 4-10):
+H1 - Revisao Mapa + roteiros (DM+AN)              (4h)     Dia 4 — Depende: A6
+H2 - Entrevista atendimento (AN)                  (90min)  Dia 5 — Depende: H1
+H3 - Entrevista Ops+Compliance (AN)               (60min)  Dia 6 — Depende: H1
+H4 - Entrevista TI+Comercial (AN+TL)              (60min)  Dia 7 — Depende: H1
+H5 - Alinhamento executivo (DM+AN)                (45min)  Dia 8 — Depende: H2-H4
+H6 - Workshop priorizacao (DM+AN)                 (2h)     Dia 9 — Depende: H5
+H7 - Discovery Final (DM+AN)                      (1 dia)  Dia 10 — Depende: H6
+
+PAPEIS:
+- DM (Felipe/DB1): gestao, garante que tudo aconteca, valida artefatos
+- AN (DB1): executa entrevistas, facilita workshop, produz documentos
+- Tech Lead (DB1): suporte tecnico em H4 e validacao de decisoes em H6
+- Agente IA: executa integralmente a fase de Intent (A1-A6)
+- Diretor NovaTech: disponibiliza stakeholders, aprova escopo, assina Discovery
+- Stakeholders NT: atendentes, Ops, Compliance, TI, Comercial
+
+================================================================================
+FIM DA CONVERSA — DISCOVERY NOVATECH
+Arquivo gerado: NovaTech-Discovery-Plan.pdf (6 paginas)
+================================================================================
