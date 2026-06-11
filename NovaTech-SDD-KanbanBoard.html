@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaTech — SDD Spec Tracking Board</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:       #1F3864;
+    --blue:       #2E75B6;
+    --col-draft:      #888780;
+    --col-draft-bg:   #F1EFE8;
+    --col-review:     #BA7517;
+    --col-review-bg:  #FAEEDA;
+    --col-approved:   #0F6E56;
+    --col-approved-bg:#E1F5EE;
+    --col-impl:       #185FA5;
+    --col-impl-bg:    #E6F1FB;
+    --col-valid:      #534AB7;
+    --col-valid-bg:   #EEEDFE;
+    --col-deploy:     #1A7A4A;
+    --col-deploy-bg:  #EAF3DE;
+    --bg:         #F4F5F7;
+    --surface:    #FFFFFF;
+    --surface2:   #F8F9FA;
+    --border:     rgba(0,0,0,0.10);
+    --border2:    rgba(0,0,0,0.18);
+    --text:       #172B4D;
+    --text-muted: #6B778C;
+    --text-light: #97A0AF;
+    --radius:     8px;
+    --radius-lg:  12px;
+    --shadow:     0 1px 3px rgba(0,0,0,0.10), 0 0 0 0.5px rgba(0,0,0,0.06);
+    --shadow-drag:0 8px 24px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.08);
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:         #161B22;
+      --surface:    #1C2128;
+      --surface2:   #252C36;
+      --border:     rgba(255,255,255,0.08);
+      --border2:    rgba(255,255,255,0.15);
+      --text:       #E6EDF3;
+      --text-muted: #848D97;
+      --text-light: #6E7681;
+      --shadow:     0 1px 3px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(255,255,255,0.06);
+      --shadow-drag:0 8px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+    }
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--navy);
+    padding: 0 24px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-logo {
+    font-size: 13px;
+    font-weight: 600;
+    color: #93B8E0;
+    letter-spacing: 0.02em;
+  }
+  .topbar-sep {
+    width: 1px; height: 16px;
+    background: rgba(255,255,255,0.2);
+  }
+  .topbar-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topbar-badge {
+    font-size: 11px;
+    background: rgba(255,255,255,0.12);
+    color: #B0C8E8;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 0.5px solid rgba(255,255,255,0.15);
+  }
+
+  /* ── SUBBAR ── */
+  .subbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .filter-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .filter-btn {
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font);
+  }
+  .filter-btn:hover { background: var(--surface2); color: var(--text); }
+  .filter-btn.active {
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+  }
+  .subbar-spacer { flex: 1; }
+  .action-btn {
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    font-family: var(--font);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s;
+  }
+  .action-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* ── STATS ROW ── */
+  .stats-wrap {
+    padding: 14px 24px 0;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    text-align: center;
+    transition: box-shadow 0.15s;
+  }
+  .stat-card:hover { box-shadow: var(--shadow); }
+  .stat-num {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--text);
+  }
+  .stat-lbl {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  /* ── BOARD ── */
+  .board {
+    padding: 14px 24px 32px;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+    align-items: start;
+    min-width: 960px;
+  }
+
+  /* ── COLUMN ── */
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-height: 120px;
+  }
+  .col.drag-over > .col-body {
+    background: rgba(46, 117, 182, 0.06);
+    border-radius: var(--radius);
+  }
+
+  .col-header {
+    border-radius: var(--radius);
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 52px;
+    z-index: 10;
+  }
+  .col-title { font-size: 11.5px; font-weight: 600; }
+  .col-count {
+    font-size: 10px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .col-body {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-height: 60px;
+    transition: background 0.15s;
+    padding: 2px;
+    border-radius: var(--radius);
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 10px 12px;
+    cursor: grab;
+    transition: box-shadow 0.15s, transform 0.1s, border-color 0.15s;
+    box-shadow: var(--shadow);
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .card:hover {
+    border-color: var(--border2);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  }
+  .card.dragging {
+    opacity: 0.5;
+    box-shadow: var(--shadow-drag);
+    transform: rotate(1.5deg) scale(1.02);
+    cursor: grabbing;
+  }
+  .card.hidden { display: none; }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .card-module {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .type-badge {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge-req  { background: #E1F5EE; color: #085041; }
+  .badge-plan { background: #FAEEDA; color: #633806; }
+  .badge-task { background: #EEEDFE; color: #3C3489; }
+
+  .card-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+  }
+  .card-owner {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .card-owner i { font-size: 13px; }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .card-version {
+    font-size: 9.5px;
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+  .card-date {
+    font-size: 9.5px;
+    color: var(--text-light);
+  }
+  .card-ids {
+    font-size: 9px;
+    color: var(--text-light);
+    font-family: var(--font-mono);
+  }
+
+  .blocked-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9.5px;
+    font-weight: 500;
+    color: #791F1F;
+    background: #FCEBEB;
+    border-radius: 10px;
+    padding: 1px 7px 1px 5px;
+  }
+  .blocked-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #E24B4A;
+  }
+
+  .done-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #085041;
+    background: #E1F5EE;
+    border-radius: 10px;
+    padding: 1px 7px 1px 5px;
+  }
+
+  .add-btn {
+    border: 1px dashed var(--border2);
+    border-radius: var(--radius);
+    padding: 7px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    background: transparent;
+    font-family: var(--font);
+    width: 100%;
+    transition: all 0.15s;
+  }
+  .add-btn:hover {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--blue);
+  }
+
+  /* ── LEGEND ── */
+  .legend-bar {
+    padding: 10px 24px 20px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    border-top: 0.5px solid var(--border);
+    margin: 0 24px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--text);
+    color: var(--surface);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 999;
+    max-width: 280px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .board { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .stats-wrap { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .board { grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: unset; }
+    .stats-wrap { grid-template-columns: repeat(2, 1fr); }
+    .topbar-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar" role="banner">
+  <div class="topbar-left">
+    <span class="topbar-logo">DB1 Global Software</span>
+    <div class="topbar-sep"></div>
+    <span class="topbar-title">NovaTech Assistant — SDD Spec Tracking</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-badge">db1/novatech-assistant</span>
+    <span class="topbar-badge">Modelo AI First</span>
+    <span class="topbar-badge">Junho 2026</span>
+  </div>
+</nav>
+
+<div class="subbar" role="toolbar" aria-label="Filtros e ações">
+  <span class="filter-label">Módulo:</span>
+  <button class="filter-btn active" onclick="filterCards('all', this)">Todos</button>
+  <button class="filter-btn" onclick="filterCards('ingest', this)">Pipeline ingestão</button>
+  <button class="filter-btn" onclick="filterCards('query', this)">Query endpoint</button>
+  <button class="filter-btn" onclick="filterCards('feedback', this)">Feedback API</button>
+  <button class="filter-btn" onclick="filterCards('bot', this)">Teams bot</button>
+  <button class="filter-btn" onclick="filterCards('painel', this)">Painel web</button>
+  <div class="subbar-spacer"></div>
+  <button class="action-btn" onclick="showToast('Exportando relatório de status...')">
+    <i class="ti ti-download" aria-hidden="true"></i> Exportar
+  </button>
+  <button class="action-btn" onclick="showBlockedReport()">
+    <i class="ti ti-alert-triangle" aria-hidden="true"></i> Ver bloqueios
+  </button>
+</div>
+
+<div class="stats-wrap" role="region" aria-label="Resumo de status">
+  <div class="stat-card"><div class="stat-num" id="s0">3</div><div class="stat-lbl">Rascunho</div></div>
+  <div class="stat-card"><div class="stat-num" id="s1">3</div><div class="stat-lbl">Em Revisão</div></div>
+  <div class="stat-card"><div class="stat-num" id="s2">3</div><div class="stat-lbl">Aprovada</div></div>
+  <div class="stat-card"><div class="stat-num" id="s3">3</div><div class="stat-lbl">Em Impl.</div></div>
+  <div class="stat-card"><div class="stat-num" id="s4">2</div><div class="stat-lbl">Validada</div></div>
+  <div class="stat-card"><div class="stat-num" id="s5">1</div><div class="stat-lbl">Implantada</div></div>
+</div>
+
+<main class="board" role="main" aria-label="Board Kanban de specs">
+
+  <!-- RASCUNHO -->
+  <div class="col" id="col-draft" ondragover="onDragOver(event,'col-draft')" ondragleave="onDragLeave('col-draft')" ondrop="onDrop(event,'draft')">
+    <div class="col-header" style="background:var(--col-draft-bg);">
+      <span class="col-title" style="color:var(--col-draft);">Rascunho</span>
+      <span class="col-count" style="background:var(--col-draft);" id="cnt-draft">3</span>
+    </div>
+    <div class="col-body" id="body-draft">
+      <div class="card" data-mod="feedback" data-status="draft" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0F6E56;">feedback-api</span>
+          <span class="type-badge badge-req">requirements</span>
+        </div>
+        <div class="card-title">Spec de requisitos — API de feedback</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Product Specialist</div>
+        <div class="card-footer">
+          <span class="card-version">v0.1</span>
+          <span class="card-date">Em aberto</span>
+        </div>
+      </div>
+      <div class="card" data-mod="bot" data-status="draft" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#534AB7;">teams-bot</span>
+          <span class="type-badge badge-req">requirements</span>
+        </div>
+        <div class="card-title">Spec de requisitos — Bot do Teams</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Product Specialist</div>
+        <div class="card-footer">
+          <span class="card-version">v0.1</span>
+          <span class="card-date">Em aberto</span>
+        </div>
+      </div>
+      <div class="card" data-mod="painel" data-status="draft" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#854F0B;">painel-web</span>
+          <span class="type-badge badge-req">requirements</span>
+        </div>
+        <div class="card-title">Spec de requisitos — Painel web</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Product Specialist</div>
+        <div class="card-footer">
+          <span class="card-version">v0.1</span>
+          <span class="card-date">Em aberto</span>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addCard('draft')" aria-label="Adicionar nova spec">+ nova spec</button>
+  </div>
+
+  <!-- EM REVISÃO -->
+  <div class="col" id="col-review" ondragover="onDragOver(event,'col-review')" ondragleave="onDragLeave('col-review')" ondrop="onDrop(event,'review')">
+    <div class="col-header" style="background:var(--col-review-bg);">
+      <span class="col-title" style="color:var(--col-review);">Em Revisão</span>
+      <span class="col-count" style="background:var(--col-review);" id="cnt-review">3</span>
+    </div>
+    <div class="col-body" id="body-review">
+      <div class="card" data-mod="query" data-status="review" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#185FA5;">query-endpoint</span>
+          <span class="type-badge badge-plan">plan</span>
+        </div>
+        <div class="card-title">Plano técnico — Query endpoint</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Tech Lead</div>
+        <div class="card-footer">
+          <span class="card-version">v1.0</span>
+          <span class="card-date">PR aberto</span>
+        </div>
+      </div>
+      <div class="card" data-mod="ingest" data-status="review" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0C447C;">pipeline-ingestao</span>
+          <span class="type-badge badge-plan">plan</span>
+        </div>
+        <div class="card-title">Plano técnico — Pipeline ingestão</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Tech Lead</div>
+        <div class="card-footer">
+          <span class="card-version">v1.1</span>
+          <span class="card-date">PR aberto</span>
+        </div>
+      </div>
+      <div class="card" data-mod="feedback" data-status="review" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0F6E56;">feedback-api</span>
+          <span class="type-badge badge-plan">plan</span>
+        </div>
+        <div class="card-title">Plano técnico — Feedback API</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Tech Lead</div>
+        <div class="card-footer">
+          <span class="card-version">v0.9</span>
+          <span class="card-date">PR aberto</span>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addCard('review')" aria-label="Adicionar spec em revisão">+ nova spec</button>
+  </div>
+
+  <!-- APROVADA -->
+  <div class="col" id="col-approved" ondragover="onDragOver(event,'col-approved')" ondragleave="onDragLeave('col-approved')" ondrop="onDrop(event,'approved')">
+    <div class="col-header" style="background:var(--col-approved-bg);">
+      <span class="col-title" style="color:var(--col-approved);">Aprovada</span>
+      <span class="col-count" style="background:var(--col-approved);" id="cnt-approved">3</span>
+    </div>
+    <div class="col-body" id="body-approved">
+      <div class="card" data-mod="query" data-status="approved" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#185FA5;">query-endpoint</span>
+          <span class="type-badge badge-req">requirements</span>
+        </div>
+        <div class="card-title">Spec de requisitos — Query endpoint</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Product Specialist</div>
+        <div class="card-footer">
+          <span class="card-version">v1.2</span>
+          <span class="card-date">11/06/2026</span>
+        </div>
+      </div>
+      <div class="card" data-mod="ingest" data-status="approved" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0C447C;">pipeline-ingestao</span>
+          <span class="type-badge badge-req">requirements</span>
+        </div>
+        <div class="card-title">Spec de requisitos — Pipeline ingestão</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Product Specialist</div>
+        <div class="card-footer">
+          <span class="card-version">v2.0</span>
+          <span class="card-date">08/06/2026</span>
+        </div>
+      </div>
+      <div class="card" data-mod="feedback" data-status="approved" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0F6E56;">feedback-api</span>
+          <span class="type-badge badge-req">requirements</span>
+        </div>
+        <div class="card-title">Spec de requisitos — Feedback API</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Product Specialist</div>
+        <div class="card-footer">
+          <span class="card-version">v1.0</span>
+          <span class="card-date">09/06/2026</span>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addCard('approved')" aria-label="Adicionar spec aprovada">+ nova spec</button>
+  </div>
+
+  <!-- EM IMPLEMENTAÇÃO -->
+  <div class="col" id="col-impl" ondragover="onDragOver(event,'col-impl')" ondragleave="onDragLeave('col-impl')" ondrop="onDrop(event,'impl')">
+    <div class="col-header" style="background:var(--col-impl-bg);">
+      <span class="col-title" style="color:var(--col-impl);">Em Impl.</span>
+      <span class="col-count" style="background:var(--col-impl);" id="cnt-impl">3</span>
+    </div>
+    <div class="col-body" id="body-impl">
+      <div class="card" data-mod="ingest" data-status="impl" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0C447C;">pipeline-ingestao</span>
+          <span class="type-badge badge-task">tasks</span>
+        </div>
+        <div class="card-title">Tasks — Pipeline de ingestão</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Dev Sênior</div>
+        <div class="card-footer">
+          <span class="card-version">v1.0</span>
+          <span class="card-ids">INGEST-T001..T009</span>
+        </div>
+      </div>
+      <div class="card" data-mod="query" data-status="impl" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#185FA5;">query-endpoint</span>
+          <span class="type-badge badge-task">tasks</span>
+        </div>
+        <div class="card-title">Tasks — Query endpoint</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Dev Sênior + Pleno</div>
+        <div class="card-footer">
+          <span class="card-version">v1.0</span>
+          <span class="card-ids">QUERY-T001..T007</span>
+        </div>
+      </div>
+      <div class="card" data-mod="feedback" data-status="impl" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0F6E56;">feedback-api</span>
+          <span class="type-badge badge-task">tasks</span>
+        </div>
+        <div class="card-title">Tasks — Feedback API</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Dev Pleno</div>
+        <div class="card-footer">
+          <div class="blocked-chip"><span class="blocked-dot"></span>bloqueado</div>
+          <span class="card-ids">FEEDBACK-T001..T004</span>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addCard('impl')" aria-label="Adicionar spec em implementação">+ nova spec</button>
+  </div>
+
+  <!-- VALIDADA -->
+  <div class="col" id="col-valid" ondragover="onDragOver(event,'col-valid')" ondragleave="onDragLeave('col-valid')" ondrop="onDrop(event,'valid')">
+    <div class="col-header" style="background:var(--col-valid-bg);">
+      <span class="col-title" style="color:var(--col-valid);">Validada</span>
+      <span class="col-count" style="background:var(--col-valid);" id="cnt-valid">2</span>
+    </div>
+    <div class="col-body" id="body-valid">
+      <div class="card" data-mod="ingest" data-status="valid" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0C447C;">pipeline-ingestao</span>
+          <span class="type-badge badge-plan">plan</span>
+        </div>
+        <div class="card-title">Plano técnico — Pipeline ingestão</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Tech Lead</div>
+        <div class="card-footer">
+          <span class="card-version">v2.0</span>
+          <span class="card-date">05/06/2026</span>
+        </div>
+      </div>
+      <div class="card" data-mod="query" data-status="valid" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#185FA5;">query-endpoint</span>
+          <span class="type-badge badge-plan">plan</span>
+        </div>
+        <div class="card-title">Plano técnico — Query endpoint</div>
+        <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Tech Lead</div>
+        <div class="card-footer">
+          <span class="card-version">v1.0</span>
+          <span class="card-date">07/06/2026</span>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addCard('valid')" aria-label="Adicionar spec validada">+ nova spec</button>
+  </div>
+
+  <!-- IMPLANTADA -->
+  <div class="col" id="col-deploy" ondragover="onDragOver(event,'col-deploy')" ondragleave="onDragLeave('col-deploy')" ondrop="onDrop(event,'deploy')">
+    <div class="col-header" style="background:var(--col-deploy-bg);">
+      <span class="col-title" style="color:var(--col-deploy);">Implantada</span>
+      <span class="col-count" style="background:var(--col-deploy);" id="cnt-deploy">1</span>
+    </div>
+    <div class="col-body" id="body-deploy">
+      <div class="card" data-mod="ingest" data-status="deploy" draggable="true" ondragstart="onDragStart(event,this)" ondragend="onDragEnd(event)">
+        <div class="card-top">
+          <span class="card-module" style="color:#0C447C;">pipeline-ingestao</span>
+          <span class="type-badge badge-req">requirements</span>
+        </div>
+        <div class="card-title">Spec de requisitos — Pipeline ingestão</div>
+        <div class="card-owner">
+          <div class="done-chip"><i class="ti ti-check" aria-hidden="true" style="font-size:11px;"></i>Concluída</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-version">v2.0</span>
+          <span class="card-date">02/06/2026</span>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addCard('deploy')" aria-label="Adicionar spec implantada">+ nova spec</button>
+  </div>
+
+</main>
+
+<div class="legend-bar" role="contentinfo" aria-label="Legenda">
+  <div class="legend-item"><span class="legend-dot" style="background:#A4D9C5;border:1px solid #0F6E56;"></span>requirements</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#FAC775;border:1px solid #854F0B;"></span>plan</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#AFA9EC;border:1px solid #534AB7;"></span>tasks</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#E24B4A;"></span>bloqueado</div>
+  <div class="legend-item"><span class="legend-dot" style="background:#1D9E75;"></span>concluído</div>
+  <div style="flex:1;"></div>
+  <span style="font-size:11px;color:var(--text-muted);">Arraste os cards entre colunas para atualizar o status</span>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const STATUSES = ['draft','review','approved','impl','valid','deploy'];
+const STAT_IDS = ['s0','s1','s2','s3','s4','s5'];
+const CNT_IDS  = ['cnt-draft','cnt-review','cnt-approved','cnt-impl','cnt-valid','cnt-deploy'];
+const COL_IDS  = ['body-draft','body-review','body-approved','body-impl','body-valid','body-deploy'];
+
+let dragCard = null;
+let activeFilter = 'all';
+
+function onDragStart(e, el) {
+  dragCard = el;
+  el.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragEnd(e) {
+  if (dragCard) dragCard.classList.remove('dragging');
+  dragCard = null;
+  document.querySelectorAll('.col').forEach(c => c.classList.remove('drag-over'));
+}
+function onDragOver(e, colId) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.getElementById(colId).classList.add('drag-over');
+}
+function onDragLeave(colId) {
+  document.getElementById(colId).classList.remove('drag-over');
+}
+function onDrop(e, status) {
+  e.preventDefault();
+  document.querySelectorAll('.col').forEach(c => c.classList.remove('drag-over'));
+  if (!dragCard) return;
+  const body = document.getElementById('body-' + status);
+  body.insertBefore(dragCard, body.firstChild);
+  dragCard.dataset.status = status;
+  updateCounts();
+  const title = dragCard.querySelector('.card-title').textContent;
+  showToast('Card movido: ' + title.substring(0,40));
+}
+
+function filterCards(mod, btn) {
+  activeFilter = mod;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.toggle('hidden', mod !== 'all' && card.dataset.mod !== mod);
+  });
+  updateCounts();
+}
+
+function updateCounts() {
+  STATUSES.forEach((s, i) => {
+    const visible = document.querySelectorAll(`#body-${s} .card:not(.hidden)`).length;
+    document.getElementById(STAT_IDS[i]).textContent = visible;
+    document.getElementById(CNT_IDS[i]).textContent = visible;
+  });
+}
+
+function addCard(status) {
+  const module = prompt('Módulo (ingest, query, feedback, bot, painel):');
+  if (!module) return;
+  const tipo = prompt('Tipo (requirements, plan, tasks):');
+  if (!tipo) return;
+  const title = prompt('Título da spec:');
+  if (!title) return;
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.mod = module.trim();
+  card.dataset.status = status;
+  card.draggable = true;
+  card.addEventListener('dragstart', e => onDragStart(e, card));
+  card.addEventListener('dragend', e => onDragEnd(e));
+
+  const badgeClass = tipo === 'requirements' ? 'badge-req' : tipo === 'plan' ? 'badge-plan' : 'badge-task';
+  const today = new Date().toLocaleDateString('pt-BR');
+
+  card.innerHTML = `
+    <div class="card-top">
+      <span class="card-module">${module.trim()}</span>
+      <span class="type-badge ${badgeClass}">${tipo.trim()}</span>
+    </div>
+    <div class="card-title">${title.trim()}</div>
+    <div class="card-owner"><i class="ti ti-user" aria-hidden="true"></i>Equipe</div>
+    <div class="card-footer">
+      <span class="card-version">v0.1</span>
+      <span class="card-date">${today}</span>
+    </div>`;
+
+  const body = document.getElementById('body-' + status);
+  body.insertBefore(card, body.firstChild);
+  updateCounts();
+  showToast('Card criado com sucesso');
+}
+
+function showBlockedReport() {
+  const blocked = document.querySelectorAll('.blocked-chip');
+  if (blocked.length === 0) {
+    showToast('Nenhum card bloqueado encontrado');
+    return;
+  }
+  const titles = Array.from(blocked).map(b => {
+    const card = b.closest('.card');
+    return '• ' + card.querySelector('.card-title').textContent;
+  }).join('\n');
+  alert('Cards bloqueados (' + blocked.length + '):\n\n' + titles);
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
