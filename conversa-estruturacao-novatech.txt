@@ -1,0 +1,540 @@
+================================================================================
+CONVERSA — FASE DE ESTRUTURACAO DO PROJETO NOVATECH
+Projeto NovaTech x DB1 Global Software
+Sessao atual | Exportada em: Junho 2026
+================================================================================
+
+CONTEXTO DA SESSAO
+Este arquivo cobre a fase de Estruturacao (Exercicios 2.1, 2.2, 2.3) do projeto
+NovaTech — assistente de IA com RAG integrado ao ambiente Microsoft (Teams +
+SharePoint + Azure). Delivery Manager: Felipe (DB1 Global Software).
+
+================================================================================
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Incorpore ao contexto do projeto a seguinte informacao:
+
+O projeto foi aprovado. Precisamos planejar a fase de discovery considerando que
+no modelo AI First, agentes de IA pre-analisam documentacao antes do discovery
+humano (fase de Intent).
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto registrado. O modelo AI First no Discovery significa que os agentes
+entram antes dos humanos, fazendo leitura estruturada da documentacao existente
+— mapeando cobertura, detectando contradicoes, identificando gaps — antes de
+qualquer reuniao com os stakeholders da NovaTech.
+
+Para o projeto NovaTech, isso e especialmente valioso porque ja temos problemas
+documentados: PROC-042 v1 vs v2 sem versionamento, FAQ informal sem validacao,
+gaps de cobertura em topicos frequentes.
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Acrescente ao contexto: Antes de entrevistas com stakeholders, agentes
+especializados analisam documentacao existente, contexto de negocio e restricoes
+para gerar um mapa priorizado de fontes, dependencias e gaps.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto atualizado. Isso define o artefato central da fase de Intent: um mapa
+estruturado e priorizado que chega na mao do humano antes da primeira entrevista.
+Para o projeto NovaTech, os agentes mapearao fontes, dependencias (ex: POL-001
+referencia PROC-088), gaps (frete <500kg, carga danificada) e contradicoes
+(PROC-042 v1 vs v2).
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Agora como delivery manager, elabore um plano de discovery que traga:
+- Atividades que serao feitas pelo agente de IA na fase de Intent (com tempo ganho)
+- Atividades que serao feitas pelo ser humano no discovery
+- A sequencia correta das atividades
+Nao gerar arquivo por enquanto.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE] — PLANO DE DISCOVERY COMPLETO
+--------------------------------------------------------------------------------
+
+BLOCO 1 — ATIVIDADES DO AGENTE DE IA (FASE DE INTENT)
+
+A1 — Inventario e classificacao das fontes documentais
+  Tempo humano sem IA: 3-5 dias | Com agente: 2-4h | Ganho: ~4 dias
+  Entrega: Matriz de inventario — ~1.250 docs classificados por tipo e vigencia
+
+A2 — Deteccao de contradicoes entre versoes
+  Tempo humano sem IA: 2-3 dias | Com agente: 3-6h | Ganho: ~2 dias
+  Entrega: Relatorio de conflitos priorizados por impacto operacional
+
+A3 — Mapeamento de gaps de cobertura documental
+  Tempo humano sem IA: 2 dias | Com agente: 2-4h | Ganho: ~1.5 dias
+  Entrega: Lista priorizada de gaps com criticidade (alto/medio/baixo)
+
+A4 — Mapeamento de dependencias entre documentos
+  Tempo humano sem IA: 1-2 dias | Com agente: 1-2h | Ganho: ~1 dia
+  Entrega: Grafo de dependencias (ex: POL-001 ref PROC-088)
+
+A5 — Analise de contexto de negocio e restricoes
+  Tempo humano sem IA: 1 dia | Com agente: 1-2h | Ganho: ~6 horas
+  Entrega: Relatorio de restricoes e riscos de governanca documental
+
+A6 — Geracao do Mapa Priorizado (artefato central)
+  Tempo humano sem IA: 3-4 dias | Com agente: 4-6h | Ganho: ~3 dias
+  Entrega: Mapa estruturado — fontes ranqueadas + dependencias + gaps + contradicoes
+
+GANHO TOTAL: ~12-16 dias de trabalho comprimidos em 1-2 dias
+
+BLOCO 2 — ATIVIDADES HUMANAS NO DISCOVERY
+
+H1 — Revisao do Mapa Priorizado (DB1 interno) — Dia 4
+  Quem: DM (gestao) + Analista de Negocios (execucao) | 4h
+
+H2 — Entrevista com time de atendimento — Dia 5
+  Quem: AN (facilitador) + DM (observador) + 4-6 atendentes NovaTech | 90min
+
+H3 — Entrevista com Operacoes e Compliance — Dia 6
+  Quem: AN + DM + Resp. Operacoes + Resp. Compliance | 60min
+
+H4 — Entrevista com TI e Comercial — Dia 7
+  Quem: AN + Tech Lead DB1 + Resp. TI + Resp. Comercial | 60min
+
+H5 — Alinhamento executivo com diretoria NovaTech — Dia 8
+  Quem: DM (lideranca) + AN + Diretor NovaTech (obrigatorio) | 45min
+
+H6 — Workshop de priorizacao — Dia 9
+  Quem: DM + AN + representantes Operacoes/TI/Comercial NovaTech | 2h
+
+H7 — Documento de Discovery Final + Backlog Inicial — Dia 10
+  Quem: DM (revisao) + AN (producao) | 1 dia
+
+TOTAL: ~10 dias uteis (sem IA seria 20-25 dias)
+
+PAPEL DO DM: NAO executa as entrevistas — garante que tudo aconteca, valida
+artefatos, remove impedimentos e responde pela qualidade do resultado.
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Crie o plano em one pager — nao se limite a numero de paginas — fornecendo todos
+os dados necessarios. Transforme em cronograma visual realizado em ate duas
+semanas, definindo responsaveis (DB1 e NovaTech), dependencias e tudo que a
+NovaTech tera que fornecer.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Documento gerado: NovaTech-Discovery-Plan.pdf (6 paginas)
+
+Pagina 1: Visao geral + Gantt de 10 dias (roxo=Agente IA, azul=DM, verde=AN,
+          laranja=DB1+NovaTech) + resumo de duracao por fase
+Paginas 2-3: Detalhamento de cada atividade (A1-A6 e H1-H7) com entradas,
+             saidas, dependencias e o que a NovaTech deve fornecer
+Pagina 4: Tabela de requisitos da NovaTech + tabela de papeis completa
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Incorpore ao contexto:
+- Discovery concluido. Artefatos: ADRs (LLM, contexto, docs contraditorios,
+  build vs buy), spec de requisitos RAG, prototipo funcional RAG open-source,
+  cenarios de falha QA, plano de testes inicial.
+- Proximo passo: estruturar ambiente, padroes e artefatos de governanca.
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Acrescente ao contexto as informacoes tecnicas alinhadas com o Lead:
+- LLM: Azure OpenAI GPT-4o (ADR-0001)
+- RAG: Azure AI Search + Azure OpenAI (ADR-0004)
+- Context budget: 4K system + 8K chunks (5x1.500t) + 3 turnos (ADR-0002)
+- Docs contraditorios: metadado de vigencia (ADR-0003)
+- Stack: TypeScript (backend/bot), React (painel web), Bicep (IaC)
+- Repo: db1/novatech-assistant
+- Time: TL + 2 devs (pleno+senior) + QA + Product Specialist + DM
+- Base: 847 docs validos, 63 descartados, 12 contradicoes pendentes (Compliance)
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Acrescente ao contexto: O time vai usar Spec Driven Development. Specs nao sao
+documentos passivos — sao contratos executaveis. Preciso definir como specs sao
+criadas, aprovadas, versionadas e rastreadas.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto registrado. O SDD muda a natureza do Gate 1 — ele deixa de ser uma
+revisao de documento e passa a ser a homologacao de um contrato que governa
+tudo que vem depois. Pontos criticos: criacao (IA sugere, humano assina),
+aprovacao (rastreavel com versao e assinantes), versionamento (o que reabre o
+gate vs ajuste menor), rastreabilidade (spec como fio condutor de todo o ciclo).
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Uploads de novos arquivos:
+- exercicio-2-fase-estruturacao.md
+- anexo-c-estrutura-repositorio.md
+- avaliacao-delivery-manager.md
+Adicione mais esses arquivos ao contexto geral do projeto.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Contexto completo absorvido. Novos elementos chave:
+
+EXERCICIO 2.1 — ja executado: workflow AI First por papel, validation gates com
+  quem aprova/o que verifica/quanto tempo/se reprovar, checklists em PDF.
+
+EXERCICIO 2.2 — parcialmente coberto: falta governanca de specs com ciclo de
+  vida, board de tracking (Kanban com 5 modulos), e processo de change management.
+
+EXERCICIO 2.3 — pendente: secao "Project Management Rules" do AGENTS.md em
+  formato machine-readable, com regras prescritivas (DEVE/NAO DEVE), nomenclatura
+  de tasks, gates consumiveis por agentes, tudo referenciando paths do repo.
+
+ANEXO C — ESTRUTURA DO REPOSITORIO (db1/novatech-assistant):
+  /specs/{modulo}/requirements.md, plan.md, tasks.md
+  /docs/adr/NNNN-titulo.md
+  /docs/change-requests/CR-NNNN.md
+  /prompts/system-prompt.md, prompt-changelog.md, eval/golden-queries.json
+  /skills/foundation/, /skills/domain/, /skills/artifact/
+  /src/functions/, /src/services/, /src/pipeline/, /src/bot/, /src/web/
+  /tests/unit/, /tests/integration/, /tests/e2e/, /tests/fixtures/
+  /infra/main.bicep, /infra/modules/, /infra/parameters/
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Adicione mais essas informacoes ao contexto:
+- Fluxo SDD: requirements.md (o que fazer) → plan.md (como fazer) → tasks.md
+  (unidades atomicas). Cada transicao e checkpoint humano.
+- 5 modulos com specs: pipeline-ingestao, query-endpoint, feedback-api,
+  teams-bot, painel-web.
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Como gerente de projetos responsavel pela governanca, sugira um processo de
+governanca de specs que cubra: quem cria cada tipo, nomenclatura, versionamento,
+localizacao no repositorio e rastreamento de mudancas.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE] — GOVERNANCA DE SPECS (COMPLETA)
+--------------------------------------------------------------------------------
+
+PRINCIPIO CENTRAL: Specs nao sao documentos — sao contratos. Nenhuma linha de
+codigo de producao existe sem uma spec aprovada que a originou.
+
+OS TRES ARTEFATOS SDD:
+
+requirements.md — O QUE
+  Dono: Product Specialist
+  Revisor: Tech Lead (valida viabilidade tecnica)
+  Aprovador: TL + DM
+  Conteudo: outcomes, scope boundaries, constraints, ADRs referenciadas,
+             verification criteria testáveis. SEM decisoes de implementacao.
+
+plan.md — O COMO
+  Dono: Tech Lead
+  Revisor: PS + Dev Senior
+  Aprovador: Product Specialist
+  Conteudo: abordagem tecnica, decisoes de arquitetura locais, dependencias
+             externas, riscos. SEM tasks.
+
+tasks.md — UNIDADES ATOMICAS
+  Dono: Dev (+ GitHub Copilot)
+  Revisor: Tech Lead
+  Aprovador: Tech Lead
+  Conteudo: ID unico, descricao, criterio de aceite, dependencias, estimativa (P/M/G),
+             responsavel. Task atomica = concluivel em maximo 1 dia.
+
+CONVENCOES DE NOMENCLATURA:
+
+Cabecalho obrigatorio:
+  <!-- spec: query-endpoint/requirements | version: 1.2 | status: aprovada
+       autor: [PS] | aprovado-por: [TL] | aprovado-em: 2026-06-11 -->
+
+Versionamento semantico simplificado:
+  Major (1.x→2.x): mudanca de escopo → reabre Gate 1
+  Minor (1.1→1.2): clarificacao → nao reabre gate
+
+IDs de tasks:
+  INGEST-T001 | QUERY-T001 | FEEDBACK-T001 | BOT-T001 | PAINEL-T001
+
+Titulo de PR:
+  [SPEC][query-endpoint/requirements][minor] Clarifica VC-03
+  [CODE][query-endpoint][QUERY-T003] Implementa validacao de input via Zod
+
+CICLO DE VIDA:
+  Rascunho → Em Revisao → Aprovada → Em Implementacao → Validada → Obsoleta
+
+RASTREABILIDADE:
+  - Toda mudanca passa por PR (nao editar main diretamente)
+  - Secao Changelog obrigatoria em toda spec
+  - PR de codigo referencia ID da task no titulo
+
+CHANGE MANAGEMENT:
+  Minor: PR com label spec-minor, revisao em 4h, sem reabrir gate
+  Major (requirements): TL + DM, Gate 1 reaberto, tasks afetadas = "blocked"
+  Major (plan): PS + Dev Senior, novo tasks.md obrigatorio antes de retomar
+  Template de Change Request: motivacao, o que muda, o que NAO muda,
+                               tasks afetadas, impacto em prazo, aprovacoes
+
+REGRAS PARA AGENTES DE IA:
+  DEVE: referenciar ID da task no codigo (// implements QUERY-T003)
+  DEVE: usar template do modulo em /specs/{modulo}/
+  NAO DEVE: criar specs fora da estrutura definida
+  NAO DEVE: modificar status no cabecalho da spec
+  NAO DEVE: iniciar geracao de tasks sem requirements aprovado
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Gerar arquivo PDF deste resultado completo da governanca.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Documento gerado: NovaTech-SDD-Governance.pdf (5 paginas)
+
+Pagina 1: Principio central + 3 artefatos SDD (cards coloridos com dono,
+          revisor, aprovador e conteudo de cada um) + arvore do repositorio
+Pagina 2: Convencoes de nomenclatura + versionamento + IDs de tasks + ciclo de
+          vida com fluxo visual (Rascunho → ... → Obsoleta)
+Pagina 3: Rastreabilidade (regras de PR, changelog, formato de titulo)
+          + tabela de change management (Minor / Major req / Major plan)
+          + template do Change Request
+Pagina 4: Quadro RACI por artefato + regras DEVE/NAO DEVE para agentes
+          + tabela operacional com 10 situacoes e o que fazer em cada uma
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Para acompanhar o andamento do projeto, criar um board de tracking (Kanban)
+para acompanhar o status de cada spec:
+Rascunho → Em Revisao → Aprovada → Em Implementacao → Validada → Implantada
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Board Kanban criado como widget interativo no chat. Contem:
+- 6 colunas com status coloridos
+- 15 cards distribuidos pelos 5 modulos (requirements, plan, tasks)
+- Filtro por modulo com contadores dinamicos
+- Card com indicador de bloqueio (feedback-api/tasks)
+- Botoes de acao: Gerar relatorio / Ver bloqueios
+
+Arquivo gerado: NovaTech-SDD-KanbanBoard.html (standalone, drag and drop
+funcionando, dark mode automatico, responsivo para mobile)
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Criar documento de gestao da mudanca da Spec — quando a Spec ja estiver em
+desenvolvimento e precisar ser alterada. Deve cobrir: analise do impacto da
+mudanca (continua na spec ou volta para o inicio da esteira), impacto em outras
+specs, impacto nos prazos, informacoes necessarias do cliente, circulo de
+aprovacao da mudanca.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Documento gerado: NovaTech-ChangeManagement-Spec.pdf (6 paginas)
+
+Pagina 1: Fluxo de decisao visual (solicitacao → classificacao Minor/Major →
+          analise → consulta NovaTech → circulo de aprovacao → decisao)
+          + tabela de criterios para continuar na spec vs reiniciar na esteira
+          (6 criterios: volume, tipo, impacto em outras specs, prazo, tasks
+          concluidas, posicao na esteira)
+
+Pagina 2: Analise de impacto em 6 dimensoes obrigatorias:
+          Escopo | Prazo | Custo | Outras Specs | Qualidade/Testes | Comunicacao
+          Para cada dimensao: pergunta central, como analisar, entregavel, atencao
+
+Pagina 3: Matriz de dependencias entre specs do projeto NovaTech
+          (6 dependencias mapeadas com nivel Alto/Medio/Baixo e como afeta)
+          + tabela de informacoes necessarias do cliente NovaTech (6 itens com
+          o que pedir, por que pedir e impacto se ausente)
+
+Pagina 4: Circulo de aprovacao (5 papeis em sequencia obrigatoria: Solicitante,
+          PS, TL, NovaTech, DM) + template completo do Change Request com
+          4 secoes, path de destino /docs/change-requests/CR-{NNNN}.md
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Adicione ao contexto: Tech Lead montando o AGENTS.md. Estrutura proposta:
+  ## Project Overview
+  ## Tech Stack & Architecture
+  ## Coding Standards (Tech Lead)
+  ## Product Rules & Guardrails (Product Specialist)
+  ## Testing Standards (QA)
+  ## Project Management Rules (Delivery Manager)
+  ## Build & Deploy
+
+DM (Felipe) e responsavel pela secao "Project Management Rules".
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Adicionar ao contexto do AGENTS.md as validacoes humanas dos gates conforme
+desenhamos anteriormente (G1 a G5 com quem aprova, o que verifica, tempo
+disponivel e o que acontece se reprovar).
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Com base em todo o contexto, crie a secao "Project Management Rules" para o
+AGENTS.md, referenciando o Anexo C para caminhos corretos. Esta secao sera lida
+por agentes de IA. Deve conter: nomenclatura de tasks, documentacao de decisoes,
+validation gates em formato consumivel por agentes, restricoes de comunicacao.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE] — SECAO PROJECT MANAGEMENT RULES (RASCUNHO PARA VALIDACAO)
+--------------------------------------------------------------------------------
+
+Secao estruturada em 4 blocos:
+
+1. NOMENCLATURA DE TASKS E ISSUES
+   - IDs: {PREFIXO}-T{NNN} (INGEST, QUERY, FEEDBACK, BOT, PAINEL)
+   - Formato de titulo: [{PREFIXO}-T{NNN}] <verbo> <objeto> — <modulo>
+   - Labels obrigatorias: tipo + modulo + status + prioridade
+   - Formato de PR: [TIPO][modulo/artefato][minor|major] descricao
+
+2. DOCUMENTACAO DE DECISOES
+   - ADRs em /docs/adr/NNNN-slug.md com formato: Contexto, Decisao,
+     Consequencias, Alternativas Consideradas
+   - ADRs vigentes: 0001 (GPT-4o), 0002 (context budget), 0003 (docs
+     contraditorios), 0004 (Azure AI Search)
+   - Change Requests em /docs/change-requests/CR-NNNN-modulo.md
+
+3. VALIDATION GATES (formato YAML machine-readable)
+   G1 Aceite Spec: TL+PS+DM | 4h | sprint nao inicia
+   G2 Validacao Tasks: TL | 2h | dev nao comeca
+   G3 Code Review: TL/DevSenior | 4h | PR nao mergeado
+   G4 Quality Gate RAG: QA+TL | 8h | nenhum deploy
+   G5 Aceite Release: PS+DM | 4h | release nao vai para producao
+
+4. RESTRICOES DE COMUNICACAO
+   - Codigo/commits/variaveis: INGLES
+   - ADRs/specs/release notes/CRs/AGENTS.md/mensagens de interface: PORTUGUES
+   - NAO DEVE: agente alterar status de spec
+   - NAO DEVE: gerar plan.md sem requirements aprovado
+   - NAO DEVE: criar specs fora de /specs/{modulo}/
+
+
+--------------------------------------------------------------------------------
+[USUARIO]
+--------------------------------------------------------------------------------
+Validei as informacoes — crie a secao para envio para o lead incorporar no
+AGENTS.md.
+
+
+--------------------------------------------------------------------------------
+[ASSISTENTE]
+--------------------------------------------------------------------------------
+Arquivo gerado: AGENTS-ProjectManagementRules.md
+
+Arquivo .md pronto para o Tech Lead incorporar no AGENTS.md do repositorio
+db1/novatech-assistant, apos a secao ## Testing Standards (QA).
+
+Pontos comunicados ao Lead junto com o arquivo:
+1. Checklists referenciados nos gates (/docs/checklists/gate-{N}-*.md) precisam
+   ser criados no repo — conteudo ja existe nos PDFs gerados.
+2. Golden dataset (/prompts/eval/golden-queries.json) precisa ser populado pelo
+   QA antes do primeiro deploy.
+3. Os 12 documentos com contradicoes pendentes (Compliance NovaTech) estao
+   referenciados no estado esperado do G4 — quando resolvidos, atualizar o
+   AGENTS.md.
+
+
+================================================================================
+RESUMO DE ARQUIVOS GERADOS NESTA SESSAO
+================================================================================
+
+| Arquivo                                    | Descricao                         | Pags/Tipo |
+|--------------------------------------------|-----------------------------------|-----------|
+| NovaTech-Discovery-Plan.pdf                | Plano de discovery com Gantt      | 6 pags    |
+| NovaTech-AIFirst-Workflow.pdf              | Fluxo de trabalho AI First        | 4 pags    |
+| NovaTech-ValidationGates-Checklist.pdf     | Checklists de gates (v1)          | 6 pags    |
+| NovaTech-ValidationGates-Checklist-v2.pdf  | Checklists com quem/tempo/reprovar| 9 pags    |
+| NovaTech-SDD-Governance.pdf                | Governanca de specs SDD           | 5 pags    |
+| NovaTech-ChangeManagement-Spec.pdf         | Gestao de mudanca de spec         | 6 pags    |
+| NovaTech-SDD-KanbanBoard.html              | Board Kanban interativo           | HTML      |
+| AGENTS-ProjectManagementRules.md           | Secao PM Rules para AGENTS.md    | Markdown  |
+
+================================================================================
+CONTEXTO COMPLETO DO PROJETO NOVATECH — REFERENCIA RAPIDA
+================================================================================
+
+CLIENTE: NovaTech — logistica, 1.200 funcionarios, 45 atendentes, ~320 chamados/dia
+CONTRATO: Assistente RAG integrado ao Teams + SharePoint, prazo 3 meses
+GARGALO: 12 min/chamado em busca manual → meta: <2 min
+CRITERIOS DE SUCESSO: -83% tempo busca | 85%+ rastreabilidade | 80%+ adocao
+
+STACK TECNICO:
+  LLM: GPT-4o via Azure OpenAI (ADR-0001)
+  RAG: Azure AI Search + Azure OpenAI (ADR-0004)
+  Context budget: 4K system + 8K chunks (5x1.500t) + 3 turnos (ADR-0002)
+  Docs contraditorios: metadado de vigencia (ADR-0003)
+  Backend/bot: TypeScript | Frontend: React | IaC: Bicep
+  Repo: db1/novatech-assistant
+
+BASE DOCUMENTAL:
+  847 docs validos | 63 descartados | 12 contradicoes pendentes (Compliance)
+  Fontes: SharePoint ~800 (mensal) | Confluence ~400 (semanal) | Pasta rede ~50 XLSX (mensal)
+
+TIME:
+  TL (decisoes arquiteturais) | Dev Senior | Dev Pleno | QA | Product Specialist
+  DM: Felipe — gestao, nao executa entrevistas nem codigo
+
+MODULOS COM SPECS:
+  pipeline-ingestao | query-endpoint | feedback-api | teams-bot | painel-web
+  Paths: /specs/{modulo}/requirements.md | plan.md | tasks.md
+
+VALIDATION GATES:
+  G1 Aceite Spec (TL+PS+DM) → G2 Validacao Tasks (TL) → G3 Code Review (TL/DS)
+  → G4 Quality Gate RAG (QA+TL) → G5 Aceite Release (PS+DM)
+
+AGENTS.MD ESTRUTURA:
+  Project Overview | Tech Stack (TL) | Coding Standards (TL) |
+  Product Rules (PS) | Testing Standards (QA) |
+  Project Management Rules (DM — secao gerada: AGENTS-ProjectManagementRules.md) |
+  Build & Deploy
+
+================================================================================
+FIM DA CONVERSA — FASE DE ESTRUTURACAO NOVATECH
+================================================================================
