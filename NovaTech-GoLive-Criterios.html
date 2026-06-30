@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Critérios de Go-Live — NovaTech Assistant</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root {
+  --navy:        #1F3864;
+  --navy-deep:   #142347;
+  --blue:        #2E75B6;
+  --blue-light:  #D6E4F0;
+  --blue-xlight: #EEF5FB;
+
+  --c1: #2E75B6;  /* Tool Orchestration */
+  --c1-bg: #E6F1FB;
+  --c2: #0F6E56;  /* Verification Loops */
+  --c2-bg: #E1F5EE;
+  --c3: #534AB7;  /* Context & Memory */
+  --c3-bg: #EEEDFE;
+  --c4: #C00000;  /* Guardrails */
+  --c4-bg: #FCE4D6;
+  --c5: #854F0B;  /* Observability */
+  --c5-bg: #FAEEDA;
+
+  --block: #C00000;
+  --block-bg: #FCEBEB;
+  --wish: #1D9E75;
+  --wish-bg: #E8F7F0;
+
+  --bg: #F4F5F7;
+  --surface: #FFFFFF;
+  --border: rgba(15,30,60,0.10);
+  --text: #16213E;
+  --text-muted: #5B6B8C;
+  --text-light: #8C97B5;
+
+  --serif: 'Source Serif 4', Georgia, serif;
+  --sans: 'Inter', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+@font-face { font-family: 'Source Serif 4'; src: local('Georgia'); }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+/* ============ TOP NAV ============ */
+.topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 1000;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+}
+.topnav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 32px;
+}
+.topnav-mark {
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--blue), #4D94D6);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 13px;
+  color: white;
+}
+.topnav-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: -0.01em;
+}
+.topnav-sub {
+  font-size: 11px;
+  color: #93B8E0;
+  margin-left: 8px;
+}
+.topnav-links {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  overflow-x: auto;
+}
+.topnav-link {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #93B8E0;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  border: none;
+  background: transparent;
+  font-family: var(--sans);
+}
+.topnav-link:hover { background: rgba(255,255,255,0.08); color: white; }
+.topnav-link.active { background: var(--blue); color: white; }
+.topnav-countdown {
+  font-size: 11px;
+  font-weight: 600;
+  color: #FFD9B3;
+  background: rgba(255,255,255,0.08);
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  margin-left: 12px;
+}
+
+/* ============ LAYOUT ============ */
+.app {
+  padding-top: 56px;
+  min-height: 100vh;
+}
+.section {
+  display: none;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 56px 32px 80px;
+  animation: fadeIn 0.35s ease;
+}
+.section.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ HERO / OVERVIEW ============ */
+.hero {
+  margin-bottom: 56px;
+}
+.hero-eyebrow {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 22px; height: 2px;
+  background: var(--blue);
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--navy-deep);
+  margin-bottom: 16px;
+  max-width: 760px;
+}
+.hero p.lede {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 620px;
+  line-height: 1.6;
+}
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 36px;
+}
+.stat-cell {
+  background: var(--surface);
+  padding: 22px 24px;
+}
+.stat-num {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+}
+.stat-num.block { color: var(--block); }
+.stat-num.wish { color: var(--wish); }
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* ============ LAYER NAV CARDS (overview) ============ */
+.layer-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 40px;
+}
+.layer-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.layer-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15,30,60,0.08);
+}
+.layer-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.layer-card[data-layer="1"]::before { background: var(--c1); }
+.layer-card[data-layer="2"]::before { background: var(--c2); }
+.layer-card[data-layer="3"]::before { background: var(--c3); }
+.layer-card[data-layer="4"]::before { background: var(--c4); }
+.layer-card[data-layer="5"]::before { background: var(--c5); }
+.layer-card-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 10px;
+}
+.layer-card-icon {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+  font-size: 17px;
+}
+.layer-card[data-layer="1"] .layer-card-icon { background: var(--c1-bg); color: var(--c1); }
+.layer-card[data-layer="2"] .layer-card-icon { background: var(--c2-bg); color: var(--c2); }
+.layer-card[data-layer="3"] .layer-card-icon { background: var(--c3-bg); color: var(--c3); }
+.layer-card[data-layer="4"] .layer-card-icon { background: var(--c4-bg); color: var(--c4); }
+.layer-card[data-layer="5"] .layer-card-icon { background: var(--c5-bg); color: var(--c5); }
+.layer-card-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.layer-card-count {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.layer-card-count b { color: var(--block); }
+
+/* ============ HITL CALLOUT (overview) ============ */
+.hitl-banner {
+  margin-top: 40px;
+  background: linear-gradient(135deg, var(--navy-deep), var(--navy));
+  border-radius: 14px;
+  padding: 28px 32px;
+  color: white;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+.hitl-banner-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  color: #FFD9B3;
+}
+.hitl-banner-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #FFD9B3;
+  margin-bottom: 6px;
+}
+.hitl-banner p {
+  font-size: 14px;
+  color: #C7D6EE;
+  line-height: 1.55;
+}
+.hitl-banner p b { color: white; }
+
+/* ============ LAYER PAGE HEADER ============ */
+.layer-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 8px;
+}
+.layer-header-icon {
+  width: 54px; height: 54px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.layer-header-eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.layer-header h2 {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  line-height: 1.15;
+}
+.layer-header-desc {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  max-width: 620px;
+}
+
+.layer-summary {
+  display: flex;
+  gap: 24px;
+  margin: 28px 0 32px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.layer-summary-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.layer-summary-num {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+}
+.layer-summary-num.block { color: var(--block); }
+.layer-summary-num.wish { color: var(--wish); }
+.layer-summary-label {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ============ CRITERIA LIST ============ */
+.criteria-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.criterion {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 18px;
+  align-items: start;
+  transition: border-color 0.15s;
+}
+.criterion:hover { border-color: rgba(15,30,60,0.2); }
+.criterion.is-hitl {
+  border-left: 3px solid #FFB347;
+  background: linear-gradient(to right, #FFFBF5, var(--surface) 12%);
+}
+
+.crit-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 5px 0;
+  border-radius: 6px;
+  text-align: center;
+  height: fit-content;
+}
+.crit-badge.block { background: var(--block-bg); color: var(--block); }
+.crit-badge.wish { background: var(--wish-bg); color: var(--wish); }
+
+.crit-body .crit-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--navy-deep);
+  line-height: 1.4;
+  margin-bottom: 5px;
+}
+.crit-body .crit-why {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+.hitl-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #8A5A00;
+  background: #FFF1D9;
+  padding: 2px 8px 2px 6px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+}
+.hitl-tag i { font-size: 12px; }
+
+/* ============ FOOTER NAV ============ */
+.page-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.footer-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: all 0.15s;
+}
+.footer-nav-btn:hover { background: var(--blue-xlight); border-color: var(--blue); }
+.footer-nav-btn .label-sm {
+  font-size: 10.5px;
+  color: var(--text-light);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 1px;
+}
+
+/* ============ SCROLLBAR ============ */
+.topnav-links::-webkit-scrollbar { height: 0; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .layer-grid { grid-template-columns: repeat(2, 1fr); }
+  .stat-strip { grid-template-columns: repeat(2, 1fr); }
+  .hero h1 { font-size: 32px; }
+  .criterion { grid-template-columns: 70px 1fr; }
+}
+@media (max-width: 600px) {
+  .layer-grid { grid-template-columns: 1fr; }
+  .topnav-sub { display: none; }
+  .section { padding: 40px 18px 60px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section { animation: none; }
+  .layer-card:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav" role="navigation" aria-label="Navegação principal">
+  <div class="topnav-brand">
+    <div class="topnav-mark">N</div>
+    <div>
+      <span class="topnav-title">NovaTech Assistant</span>
+      <span class="topnav-sub">Critérios de Go-Live</span>
+    </div>
+  </div>
+  <div class="topnav-links" role="tablist">
+    <button class="topnav-link active" data-target="overview" role="tab" aria-selected="true">Visão Geral</button>
+    <button class="topnav-link" data-target="layer1" role="tab">1 · Orchestration</button>
+    <button class="topnav-link" data-target="layer2" role="tab">2 · Verification</button>
+    <button class="topnav-link" data-target="layer3" role="tab">3 · Context</button>
+    <button class="topnav-link" data-target="layer4" role="tab">4 · Guardrails</button>
+    <button class="topnav-link" data-target="layer5" role="tab">5 · Observability</button>
+  </div>
+  <span class="topnav-countdown"><i class="ti ti-clock" aria-hidden="true"></i> Demo em 2 semanas</span>
+</nav>
+
+<main class="app">
+
+  <!-- ============ OVERVIEW ============ -->
+  <section class="section active" id="overview">
+    <div class="hero">
+      <p class="hero-eyebrow">Harness de Governança · DB1 × NovaTech</p>
+      <h1>O que precisa estar pronto antes do assistente ir ao ar.</h1>
+      <p class="lede">31 critérios organizados nas 5 camadas do harness, classificados como bloqueantes ou desejáveis. Cada camada é uma página própria — navegue pelo menu acima ou pelos cartões abaixo.</p>
+
+      <div class="stat-strip">
+        <div class="stat-cell">
+          <div class="stat-num">31</div>
+          <div class="stat-label">Critérios mapeados</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num block">23</div>
+          <div class="stat-label">Bloqueantes</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num wish">8</div>
+          <div class="stat-label">Desejáveis</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Pontos de HITL</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-grid">
+      <div class="layer-card" data-layer="1" data-target="layer1">
+        <div class="layer-card-num">CAMADA 01</div>
+        <div class="layer-card-icon"><i class="ti ti-route" aria-hidden="true"></i></div>
+        <div class="layer-card-title">Tool Orchestration</div>
+        <div class="layer-card-count"><b>4</b> bloqueantes · 2 desejáveis</div>
+      </div>
+      <div class="layer-card" data-layer="2" data-target="layer2">
+        <div class="layer-card-num">CAMADA 02</div>
+        <div class="layer-card-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+        <div class="layer-card-title">Verification Loops</div>
+        <div class="layer-card-count"><b>6</b> bloqueantes · 1 desejável</div>
+      </div>
+      <div class="layer-card" data-layer="3" data-target="layer3">
+        <div class="layer-card-num">CAMADA 03</div>
+        <div class="layer-card-icon"><i class="ti ti-brain" aria-hidden="true"></i></div>
+        <div class="layer-card-title">Context &amp; Memory</div>
+        <div class="layer-card-count"><b>3</b> bloqueantes · 2 desejáveis</div>
+      </div>
+      <div class="layer-card" data-layer="4" data-target="layer4">
+        <div class="layer-card-num">CAMADA 04</div>
+        <div class="layer-card-icon"><i class="ti ti-shield-lock" aria-hidden="true"></i></div>
+        <div class="layer-card-title">Guardrails</div>
+        <div class="layer-card-count"><b>6</b> bloqueantes · 1 desejável</div>
+      </div>
+      <div class="layer-card" data-layer="5" data-target="layer5">
+        <div class="layer-card-num">CAMADA 05</div>
+        <div class="layer-card-icon"><i class="ti ti-eye" aria-hidden="true"></i></div>
+        <div class="layer-card-title">Observability</div>
+        <div class="layer-card-count"><b>4</b> bloqueantes · 2 desejáveis</div>
+      </div>
+    </div>
+
+    <div class="hitl-banner">
+      <div class="hitl-banner-icon"><i class="ti ti-user-check" aria-hidden="true"></i></div>
+      <div>
+        <div class="hitl-banner-title">Human-in-the-Loop</div>
+        <p>Dois pontos do fluxo são bloqueados para revisão humana antes de chegar ao atendente: <b>respostas de baixa confiança sobre carga perigosa</b> e <b>respostas de baixa confiança sobre devolução, frete especial ou SLA contratual</b>. Ambos estão detalhados na Camada 4 — Guardrails.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LAYER 1 — TOOL ORCHESTRATION ============ -->
+  <section class="section" id="layer1">
+    <div class="layer-header">
+      <div class="layer-header-icon" style="background:var(--c1-bg);color:var(--c1);"><i class="ti ti-route" aria-hidden="true"></i></div>
+      <div>
+        <div class="layer-header-eyebrow" style="color:var(--c1);">CAMADA 1 DE 5</div>
+        <h2>Tool Orchestration</h2>
+        <p class="layer-header-desc">Coordenação entre Azure AI Search, Azure OpenAI e o Bot Framework — garantir que as ferramentas conversam entre si de forma confiável.</p>
+      </div>
+    </div>
+
+    <div class="layer-summary">
+      <div class="layer-summary-item"><span class="layer-summary-num block">4</span><span class="layer-summary-label">Bloqueantes</span></div>
+      <div class="layer-summary-item"><span class="layer-summary-num wish">2</span><span class="layer-summary-label">Desejáveis</span></div>
+    </div>
+
+    <div class="criteria-list">
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Pipeline de ingestão processa os 847 documentos válidos sem erro</div>
+          <div class="crit-why">Sem base indexada corretamente, não há o que recuperar.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Query endpoint orquestra busca → geração → resposta em sequência confiável, sem timeout silencioso</div>
+          <div class="crit-why">Falha na orquestração quebra a experiência completa do atendente.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Bot do Teams consome o query endpoint sem perda de payload</div>
+          <div class="crit-why">Já validado em staging com 5 atendentes-piloto — manter monitorado até o go-live.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Fallback definido quando o Azure OpenAI não responde dentro do SLA</div>
+          <div class="crit-why">Sem isso, o atendente fica esperando indefinidamente sem nenhum feedback.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge wish">Desejável</span>
+        <div class="crit-body">
+          <div class="crit-title">Re-tentativa automática em caso de falha transitória da API</div>
+          <div class="crit-why">Mitiga instabilidade pontual, mas não impede a operação manual no go-live.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge wish">Desejável</span>
+        <div class="crit-body">
+          <div class="crit-title">Roteamento dinâmico entre múltiplos índices do Azure AI Search</div>
+          <div class="crit-why">Não existe necessidade hoje — apenas 1 índice está ativo no projeto.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer-nav">
+      <button class="footer-nav-btn" data-target="overview"><i class="ti ti-arrow-left" aria-hidden="true"></i><span><span class="label-sm">Voltar</span>Visão Geral</span></button>
+      <button class="footer-nav-btn" data-target="layer2"><span style="text-align:right;"><span class="label-sm">Próxima camada</span>Verification Loops</span><i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    </div>
+  </section>
+
+  <!-- ============ LAYER 2 — VERIFICATION LOOPS ============ -->
+  <section class="section" id="layer2">
+    <div class="layer-header">
+      <div class="layer-header-icon" style="background:var(--c2-bg);color:var(--c2);"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+      <div>
+        <div class="layer-header-eyebrow" style="color:var(--c2);">CAMADA 2 DE 5</div>
+        <h2>Verification Loops</h2>
+        <p class="layer-header-desc">Verificação automática de outputs — a camada mais crítica diante dos 12% de respostas incorretas identificadas em teste.</p>
+      </div>
+    </div>
+
+    <div class="layer-summary">
+      <div class="layer-summary-item"><span class="layer-summary-num block">6</span><span class="layer-summary-label">Bloqueantes</span></div>
+      <div class="layer-summary-item"><span class="layer-summary-num wish">1</span><span class="layer-summary-label">Desejável</span></div>
+    </div>
+
+    <div class="criteria-list">
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Structured outputs implementado: resposta sempre em JSON com campos obrigatórios (answer, source_document, confidence_score)</div>
+          <div class="crit-why">Hoje a resposta é texto livre — é a causa raiz do problema de fonte ausente.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Respostas sem source_document preenchido são rejeitadas programaticamente antes de chegar ao atendente</div>
+          <div class="crit-why">Sem isso, alucinação sem fonte passa direto, como já ocorreu nos 12% de erro identificados.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Taxa de alucinação validada em golden dataset abaixo de 5% antes do go-live</div>
+          <div class="crit-why">12% atual é inaceitável para a demo de diretoria — meta mínima de redução.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Verificação automática de que o source_document citado existe na lista de 847 documentos válidos</div>
+          <div class="crit-why">Evita citação de documento descartado ou inexistente — alucinação de fonte.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Verificação cruzada de versão quando dois documentos do mesmo tópico estão indexados (ex: PROC-042 v1 vs v2)</div>
+          <div class="crit-why">Risco documentado desde a fase de discovery — sem isso, mistura de versões é praticamente garantida.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Verificação de idioma da resposta — sempre português, independente do idioma da pergunta</div>
+          <div class="crit-why">Identificado como falha real em teste: resposta em inglês para pergunta em inglês.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge wish">Desejável</span>
+        <div class="crit-body">
+          <div class="crit-title">Comparação automática de respostas similares para detectar inconsistência entre sessões diferentes</div>
+          <div class="crit-why">Útil para monitoramento contínuo, não crítico para a demo.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer-nav">
+      <button class="footer-nav-btn" data-target="layer1"><i class="ti ti-arrow-left" aria-hidden="true"></i><span><span class="label-sm">Camada anterior</span>Tool Orchestration</span></button>
+      <button class="footer-nav-btn" data-target="layer3"><span style="text-align:right;"><span class="label-sm">Próxima camada</span>Context &amp; Memory</span><i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    </div>
+  </section>
+
+  <!-- ============ LAYER 3 — CONTEXT & MEMORY ============ -->
+  <section class="section" id="layer3">
+    <div class="layer-header">
+      <div class="layer-header-icon" style="background:var(--c3-bg);color:var(--c3);"><i class="ti ti-brain" aria-hidden="true"></i></div>
+      <div>
+        <div class="layer-header-eyebrow" style="color:var(--c3);">CAMADA 3 DE 5</div>
+        <h2>Context &amp; Memory</h2>
+        <p class="layer-header-desc">Manutenção de contexto entre interações — verificar que a implementação é fiel à estratégia já decidida na ADR-0002.</p>
+      </div>
+    </div>
+
+    <div class="layer-summary">
+      <div class="layer-summary-item"><span class="layer-summary-num block">3</span><span class="layer-summary-label">Bloqueantes</span></div>
+      <div class="layer-summary-item"><span class="layer-summary-num wish">2</span><span class="layer-summary-label">Desejáveis</span></div>
+    </div>
+
+    <div class="criteria-list">
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Context budget implementado conforme ADR-0002 — 4K system + 8K chunks + 3 turnos de histórico</div>
+          <div class="crit-why">Decisão já tomada e documentada — verificar que a implementação é fiel à ADR.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Janela deslizante de histórico ativa para evitar context rot em sessões longas</div>
+          <div class="crit-why">Sem isso, sessões com múltiplas perguntas degradam silenciosamente.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Sistema não assume dados não informados pelo atendente (ex: região do frete)</div>
+          <div class="crit-why">Falha real identificada em teste — o modelo assumiu "Sudeste" sem o atendente informar.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge wish">Desejável</span>
+        <div class="crit-body">
+          <div class="crit-title">Reset de contexto disponível para o atendente iniciar nova consulta sem histórico anterior</div>
+          <div class="crit-why">Boa prática de UX, mas contornável manualmente abrindo nova conversa.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge wish">Desejável</span>
+        <div class="crit-body">
+          <div class="crit-title">Sumarização automática de histórico em sessões acima de 5 turnos</div>
+          <div class="crit-why">Mitigação adicional de context rot, não crítica com a janela deslizante já implementada.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer-nav">
+      <button class="footer-nav-btn" data-target="layer2"><i class="ti ti-arrow-left" aria-hidden="true"></i><span><span class="label-sm">Camada anterior</span>Verification Loops</span></button>
+      <button class="footer-nav-btn" data-target="layer4"><span style="text-align:right;"><span class="label-sm">Próxima camada</span>Guardrails</span><i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    </div>
+  </section>
+
+  <!-- ============ LAYER 4 — GUARDRAILS ============ -->
+  <section class="section" id="layer4">
+    <div class="layer-header">
+      <div class="layer-header-icon" style="background:var(--c4-bg);color:var(--c4);"><i class="ti ti-shield-lock" aria-hidden="true"></i></div>
+      <div>
+        <div class="layer-header-eyebrow" style="color:var(--c4);">CAMADA 4 DE 5</div>
+        <h2>Guardrails</h2>
+        <p class="layer-header-desc">Limites que o sistema não pode ultrapassar — inclui os dois pontos obrigatórios de revisão humana (HITL) antes da resposta chegar ao atendente.</p>
+      </div>
+    </div>
+
+    <div class="layer-summary">
+      <div class="layer-summary-item"><span class="layer-summary-num block">6</span><span class="layer-summary-label">Bloqueantes</span></div>
+      <div class="layer-summary-item"><span class="layer-summary-num wish">1</span><span class="layer-summary-label">Desejável</span></div>
+    </div>
+
+    <div class="criteria-list">
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Guardrails de produto (DEVE / NÃO DEVE / QUANDO EM DÚVIDA) implementados no prompt e validados em teste</div>
+          <div class="crit-why">Já formalizados pelo Product Specialist na fase de estruturação — falta validar que estão em vigor no comportamento real.</div>
+        </div>
+      </div>
+
+      <div class="criterion is-hitl">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="hitl-tag"><i class="ti ti-user-check" aria-hidden="true"></i> Human-in-the-Loop</div>
+          <div class="crit-title">Respostas de baixa confiança sobre carga perigosa são bloqueadas e escaladas para supervisor antes de chegar ao atendente</div>
+          <div class="crit-why">Tema com risco de segurança e de responsabilidade civil para a NovaTech.</div>
+        </div>
+      </div>
+
+      <div class="criterion is-hitl">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="hitl-tag"><i class="ti ti-user-check" aria-hidden="true"></i> Human-in-the-Loop</div>
+          <div class="crit-title">Respostas de baixa confiança sobre devolução, frete especial ou SLA contratual são sinalizadas como "verificar com supervisor" em vez de apresentadas como definitivas</div>
+          <div class="crit-why">Reduz o risco de repasse de informação incorreta em temas com impacto financeiro direto ao cliente.</div>
+        </div>
+      </div>
+
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Sistema nunca inventa tier de cliente inexistente — sempre redireciona para os 3 tiers documentados (Gold/Silver/Standard)</div>
+          <div class="crit-why">Cenário clássico de alucinação, já mapeado desde a fase de discovery.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Sistema recusa responder fora do escopo de logística</div>
+          <div class="crit-why">Validado em teste com sucesso — manter como guardrail formal e monitorado.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Mensagem padrão de "não encontrei informação" ativa e testada em todos os gaps documentais conhecidos</div>
+          <div class="crit-why">Base do comportamento esperado documentado desde o Anexo B — sem isso, risco de alucinação em gaps.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge wish">Desejável</span>
+        <div class="crit-body">
+          <div class="crit-title">Limite de taxa (rate limiting) por atendente para evitar abuso ou loop de perguntas automatizadas</div>
+          <div class="crit-why">Risco operacional baixo com 5 atendentes-piloto; relevante para escala futura.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer-nav">
+      <button class="footer-nav-btn" data-target="layer3"><i class="ti ti-arrow-left" aria-hidden="true"></i><span><span class="label-sm">Camada anterior</span>Context &amp; Memory</span></button>
+      <button class="footer-nav-btn" data-target="layer5"><span style="text-align:right;"><span class="label-sm">Próxima camada</span>Observability</span><i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    </div>
+  </section>
+
+  <!-- ============ LAYER 5 — OBSERVABILITY ============ -->
+  <section class="section" id="layer5">
+    <div class="layer-header">
+      <div class="layer-header-icon" style="background:var(--c5-bg);color:var(--c5);"><i class="ti ti-eye" aria-hidden="true"></i></div>
+      <div>
+        <div class="layer-header-eyebrow" style="color:var(--c5);">CAMADA 5 DE 5</div>
+        <h2>Observability</h2>
+        <p class="layer-header-desc">Visibilidade do que acontece em produção — a camada ainda não construída até o momento, e necessária para que a diretoria confie no sistema na demo.</p>
+      </div>
+    </div>
+
+    <div class="layer-summary">
+      <div class="layer-summary-item"><span class="layer-summary-num block">4</span><span class="layer-summary-label">Bloqueantes</span></div>
+      <div class="layer-summary-item"><span class="layer-summary-num wish">2</span><span class="layer-summary-label">Desejáveis</span></div>
+    </div>
+
+    <div class="criteria-list">
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Logging de toda interação (pergunta, resposta, fonte citada, confidence score, latência) sem dados sensíveis do atendente</div>
+          <div class="crit-why">Sem isso, é impossível investigar os 12% de erro já identificados ou futuros incidentes.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Dashboard mínimo com taxa de erro, latência média e volume de perguntas/dia</div>
+          <div class="crit-why">Visibilidade mínima necessária para a diretoria confiar no sistema na demo.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Alerta automático quando a taxa de respostas sem fonte citada excede o threshold definido</div>
+          <div class="crit-why">Conecta diretamente ao problema identificado nos testes internos — sem alerta, o problema só seria descoberto pelo cliente.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge block">Bloqueante</span>
+        <div class="crit-body">
+          <div class="crit-title">Retenção de logs por período definido com tratamento adequado de LGPD para dados do atendente</div>
+          <div class="crit-why">Risco legal se não tratado — o atendente é colaborador da NovaTech e seus dados precisam de tratamento adequado.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge wish">Desejável</span>
+        <div class="crit-body">
+          <div class="crit-title">Rastreamento de quais documentos são mais consultados e quais perguntas não têm resposta</div>
+          <div class="crit-why">Valioso para melhoria contínua pós-go-live, não bloqueia a operação inicial.</div>
+        </div>
+      </div>
+      <div class="criterion">
+        <span class="crit-badge wish">Desejável</span>
+        <div class="crit-body">
+          <div class="crit-title">Painel de observabilidade acessível à NovaTech, não apenas à DB1</div>
+          <div class="crit-why">Aumenta transparência e confiança, mas pode ser entregue na primeira iteração pós-go-live.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer-nav">
+      <button class="footer-nav-btn" data-target="layer4"><i class="ti ti-arrow-left" aria-hidden="true"></i><span><span class="label-sm">Camada anterior</span>Guardrails</span></button>
+      <button class="footer-nav-btn" data-target="overview"><span style="text-align:right;"><span class="label-sm">Voltar ao início</span>Visão Geral</span><i class="ti ti-arrow-up" aria-hidden="true"></i></button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+function go(target) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(target).classList.add('active');
+  document.querySelectorAll('.topnav-link').forEach(l => l.classList.remove('active'));
+  const navLink = document.querySelector(`.topnav-link[data-target="${target}"]`);
+  if (navLink) navLink.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  history.replaceState(null, '', '#' + target);
+}
+
+document.querySelectorAll('[data-target]').forEach(el => {
+  el.addEventListener('click', () => go(el.dataset.target));
+});
+
+window.addEventListener('keydown', (e) => {
+  const order = ['overview','layer1','layer2','layer3','layer4','layer5'];
+  const current = document.querySelector('.section.active').id;
+  const idx = order.indexOf(current);
+  if (e.key === 'ArrowRight' && idx < order.length - 1) go(order[idx+1]);
+  if (e.key === 'ArrowLeft' && idx > 0) go(order[idx-1]);
+});
+
+const hash = window.location.hash.replace('#','');
+if (hash && document.getElementById(hash)) go(hash);
+</script>
+
+</body>
+</html>
